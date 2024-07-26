@@ -7,14 +7,14 @@
 </head>
 <body>
 <div class="container">
-<div class="grid-container-nav">
-<!--    Logo and Navbar-->
-    <div class="nav-logo">Logo</div>
-    <div class="nav-title">Welcome to our book shop!</div>
-    <button class="login-btn">Login</button>
-    <button class="shop-btn">Shop</button>
-</div>
-<!--    Searchbar-->
+    <div class="grid-container-nav">
+        <!--    Logo and Navbar-->
+        <div class="nav-logo">Logo</div>
+        <div class="nav-title">Welcome to our book shop!</div>
+        <button class="login-btn" id="loginBtn">Login</button>
+        <button class="shop-btn">Shop</button>
+    </div>
+    <!--    Searchbar-->
     <div class="grid-container-content">
         <input id="searchBar">
     </div>
@@ -35,8 +35,14 @@
     </div>
 </div>
 <footer>
- <div class="footer-content">Spor</div>
+    <div class="footer-content">Spor</div>
 </footer>
+
+<script>
+    document.getElementById('loginBtn').addEventListener('click', function () {
+        window.location.href = 'login.html';
+    });
+</script>
 </body>
 
 </html>

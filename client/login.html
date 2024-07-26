@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="login.css">
+    <title>Login</title>
+</head>
+<body>
+<div class="grid-container">
+    <div class="up"></div>
+    <div class="container">
+        <div class="login">
+            <div class="logo"> <img src='C:\Users\BitStone\PhpstormProjects\StoreBook\client\assets\a9lHc401.svg' alt='Logo' /></div>
+            <label class="label-form"><b>Hello! Welcome back!</b></label>
+            <form>
+                <div class="form-wrapper">
+                    <div class="email-wrapper">
+                        <label>Email</label>
+                        <input type="text"/>
+                    </div>
+                    <div class="password-wrapper">
+                        <label>Password</label>
+                        <input type="text"/>
+                    </div>
+                </div>
+                <div class="password-bottom">
+                    <div class="forgot-password">
+                        <label>Forgot password? Press</label>
+                        <button type="submit" class="btn-forgot-password">here</button>
+                    </div>
+                    <div class="btn-login">
+                        <button type="button" class="btn-btn-login">Login</button>
+                    </div>
+                    <div class="register">
+                        <label> Not a member? Register</label>
+                        <button id="registerBtn" type="button">here</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('registerBtn').addEventListener('click', function () {
+        window.location.href = 'register.html';
+    });
+</script>
+</body>
+</html>
