@@ -1,0 +1,169 @@
+
+.body {
+    width: auto;
+}
+
+* {
+    font-family: Tahoma, sans-serif;
+}
+
+.img-logo {
+    max-width: 50%;
+    max-height: 50%;
+}
+
+.label-form {
+    font-size: 20px;
+    color: #987070;
+}
+
+.grid-container {
+    display: grid;
+    position: relative;
+    grid-template-rows: 1fr 1fr;
+    height: 100vh;
+}
+
+.up {
+    background: #E2BFB3;
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.register {
+    border-radius: 8px;
+    background: #FEECE2;
+    box-shadow: 3px 3px 20px 0px rgba(5, 5, 5, 0.15);
+    width: fit-content;
+    height: fit-content;
+    box-sizing: border-box;
+    padding-left:50px;
+    padding-right:40px;
+    padding-top:10px;
+    padding-bottom:10px;
+}
+
+.form {
+    width: fit-content;
+    height: fit-content;
+}
+
+.form-wrapper {
+    padding-left: 5px;
+    padding-right: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+    border-width: 1px;
+    border-style: outset;
+}
+
+.name-wrapper {
+    padding: 20px 0px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 20px;
+    color: #987070;
+}
+
+.lastname-wrapper {
+    padding: 20px 0px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 20px;
+    color: #987070;
+}
+
+.email-wrapper {
+    padding: 20px 0px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 20px;
+    color: #987070;
+}
+
+.password-wrapper {
+    padding: 20px 0px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 20px;
+    color: #987070;
+}
+
+.age-wrapper {
+    padding: 20px 0px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 20px;
+    color: #987070;
+}
+
+.adress-wrapper {
+    padding: 20px 0px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 20px;
+    color: #987070;
+}
+
+.phone-wrapper {
+    padding: 20px 0px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 20px;
+    color: #987070;
+}
+
+.forgot-password {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    height: fit-content;
+    margin-top: 5px;
+    font-size: 20px;
+    color: #987070;
+}
+
+.btn-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    font-size: 20px;
+    color: #987070;
+}
+
+.login-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0px;
+    margin-left: 10px;
+    font-size: 20px;
+    color: #987070;
+}
+
+.login-btn {
+    margin-left: 10px;
+    font-size: 20px;
+    color: #987070;
+}
