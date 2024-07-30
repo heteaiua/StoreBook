@@ -1,41 +1,10 @@
-.body {
+body {
     width: auto;
 }
 
 .container {
     min-height: 90vh;
-}
-
-.grid-container-nav {
-    display: grid;
-    width: 100%;
-    height: 50px;
-    border-style: solid;
-    border-width: 2px;
-    border-color: grey;
-    grid-template-columns: 1fr 2fr 1fr 1fr;
-    color: red;
-}
-
-.nav-title {
-    color: red;
-    border: 2px;
-}
-
-.logo {
-    color: red;
-}
-
-.login-btn {
-    color: red;
-    cursor: pointer;
-    border: 2px;
-}
-
-.shop-btn {
-    color: red;
-    cursor: pointer;
-    border: 2px;
+    min-width: 100%;
 }
 
 .grid-container-content {
@@ -49,7 +18,6 @@
 }
 
 #searchBar {
-    display: flex;
     padding: 10px;
     width: 100%;
     align-items: center;
@@ -85,7 +53,6 @@
     border-style: solid;
     border-width: 2px;
     border-color: grey;
-
 }
 
 .card {
@@ -107,5 +74,15 @@
     background-color: grey;
     height: 60px;
 }
-
-
+.custom-navbar {
+    background-color: #d6a798 !important;
+}
+.btn-outline-primary{
+    color: #ffffff;
+    background-color: #807171;
+   border-color: #3d3330;
+}
+.btn-outline-primary:hover{
+    background-color: black;
+    border-color: black;
+}

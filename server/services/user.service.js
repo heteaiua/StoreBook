@@ -1,34 +1,11 @@
 const User = require("../models/user");
-
-const getAllUsers = async () => {
-    return await User.find().exec();
-};
-
-const getUserById = async (userId) => {
-    return await User.findById(userId).exec();
-};
-
-const addUser = async ({firstName, lastName, email, password, confirmPassword, age, address, phoneNumber}) => {
-    const newUser = new User({firstName, lastName, email, password, confirmPassword, age, address, phoneNumber});
-    return await newUser.save();
-};
-
-const deleteUser = async (userId) => {
-    return await User.findByIdAndDelete(userId).exec();
-};
-
-const updateUser = async (userId, userDetails) => {
-    return await User.findByIdAndUpdate(
-        userId,
-        {$set: userDetails},
-        {new: true} // Return the updated document
-    ).exec();
-};
+const createRepository = require("../repository/repository");
+const userRepository = createRepository(User);
 
 module.exports = {
-    getAllUsers,
-    getUserById,
-    addUser,
-    deleteUser,
-    updateUser
+    getAllUsers:userRepository.getAll,
+    getUserById:userRepository.getById,
+    addUser:userRepository.add,
+    deleteUser:userRepository.delete,
+    updateUser:userRepository.update
 };
