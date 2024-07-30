@@ -22,7 +22,7 @@
 .container {
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 65%;
     transform: translate(-50%, -50%);
 }
 
@@ -43,15 +43,14 @@
 }
 
 .form-wrapper {
-    padding-bottom: 20px;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     width: 100%;
     margin-top: 20px;
-    border-width: 1px;
-    border-style: outset;
+    background: #FFFFFF; /* Lighter background color */
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .label-form {
@@ -69,8 +68,6 @@
 }
 
 .password-wrapper {
-    padding: 20px 0px;
-    display: flex;
     justify-content: space-between;
     margin-top: 20px;
     font-size: 20px;
@@ -118,12 +115,17 @@
     color: grey;
 }
 
-#registerBtn {
-    margin-left: 5px;
-    font-size: 20px;
-    color: #987070;
-}
-
 .logo {
 
+}
+
+.btn-outline-info {
+    margin-left: 10px;
+}
+
+.form-group label {
+    color: #987070;
+}
+.form .form-wrapper{
+    color:#FEECE2;
 }
