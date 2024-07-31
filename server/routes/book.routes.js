@@ -4,14 +4,15 @@ const {
     getBookById,
     addBook,
     deleteBook,
-    updateBook
+    updateBook,
+    filteredBooks
 } = require("../controllers/book.controller");
 
 const router = express.Router();
-
-router.get("/:bookId", getBookById);
+router.get("/filter", filteredBooks)
 router.get("/", getAllBooks);
 router.post("/", addBook);
+router.get("/:bookId", getBookById);
 router.delete("/:bookId", deleteBook);
 router.patch("/:bookId", updateBook);
 

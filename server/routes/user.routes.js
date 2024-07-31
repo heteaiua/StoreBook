@@ -4,11 +4,12 @@ const {
     getUserById,
     addUser,
     deleteUser,
-    updateUser
+    updateUser,
+    filteredUsers
 } = require("../controllers/user.controller");
 
 const router = express.Router();
-
+router.get("/filter",filteredUsers);
 router.get("/", getAllUsers);
 router.get("/:userId", getUserById);
 router.post("/", addUser);

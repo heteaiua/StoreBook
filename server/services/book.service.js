@@ -1,12 +1,8 @@
-const Book = require("../models/Book");
-const createRepository = require("../repository/repository");
+const BaseClass = require("../repository/repository");
+const BookModel = require("../models/book");
 
-const bookRepository = createRepository(Book);
+class BookService extends BaseClass {
 
-module.exports = {
-    getAllBooks: bookRepository.getAll,
-    getBookById: bookRepository.getById,
-    addBook: bookRepository.add,
-    deleteBook: bookRepository.delete,
-    updateBook: bookRepository.update
-};
+}
+
+module.exports = new BookService(BookModel);

@@ -1,11 +1,8 @@
-const User = require("../models/user");
-const createRepository = require("../repository/repository");
-const userRepository = createRepository(User);
+const BaseClass = require("../repository/repository");
+const UserModel = require("../models/user");
 
-module.exports = {
-    getAllUsers:userRepository.getAll,
-    getUserById:userRepository.getById,
-    addUser:userRepository.add,
-    deleteUser:userRepository.delete,
-    updateUser:userRepository.update
-};
+class UserService extends BaseClass {
+
+}
+
+module.exports = new UserService(UserModel);

@@ -1,30 +1,83 @@
-const createRepository = (model) => {
-    return {
-        getAll: async () => {
-            return await model.find().exec();
-        },
+class BaseClass {
+    constructor(model) {
+        this.model = model;
+    }
 
-        getById: async (id) => {
-            return await model.findById(id).exec();
-        },
+    async getAll() {
+        return await this.model.find().exec();
+    }
 
-        add: async (data) => {
-            const newItem = new model(data);
-            return await newItem.save();
-        },
+    async getById(id) {
+        return await this.model.findById(id).exec();
+    }
 
-        delete: async (id) => {
-            return await model.findByIdAndDelete(id).exec();
-        },
+    async add(data) {
+        const newItem = new this.model(data);
+        return newItem.save();
+    }
 
-        update: async (id, details) => {
-            return await model.findByIdAndUpdate(
-                id,
-                { $set: details },
-                { new: true }
-            ).exec();
+    async delete(id) {
+        return await this.model.findByIdAndDelete(id).exec();
+    }
+
+    async update(id, details) {
+        return await this.model.findByIdAndUpdate(id, {$set: details}, {new: true}).exec();
+    }
+    async getFiltered(filters = {}, sortBy = '_id', sortOrder = 'asc', page = 1, limit = 10) {
+        try {
+            const query = this.buildQuery(filters);
+            const skip = (page - 1) * limit;
+            const items = await this.model.find(query)
+                .sort({ [sortBy]: sortOrder })
+                .skip(skip)
+                .limit(limit)
+                .exec();
+            return items;
+        } catch (err) {
+            throw new Error("Error in filtering items: " + err.message);
         }
-    };
-};
+    }
 
-module.exports = createRepository;
+    buildQuery(filters) {
+        const query = {};
+        for (const [key, value] of Object.entries(filters)) {
+            if (typeof value === 'object' && value !== null) {
+                query[key] = this.buildComparisonQuery(value);
+            } else {
+                query[key] = value;
+            }
+        }
+        return query;
+    }
+
+    buildComparisonQuery(filter) {
+        const comparisonQuery = {};
+        for (const [operator, value] of Object.entries(filter)) {
+            switch (operator) {
+                case 'min':
+                    comparisonQuery['$gte'] = value;
+                    break;
+                case 'max':
+                    comparisonQuery['$lte'] = value;
+                    break;
+                case '<':
+                    comparisonQuery['$lt'] = value;
+                    break;
+                case '<=':
+                    comparisonQuery['$lte'] = value;
+                    break;
+                case '>':
+                    comparisonQuery['$gt'] = value;
+                    break;
+                case '>=':
+                    comparisonQuery['$gte'] = value;
+                    break;
+                default:
+                    throw new Error(`Unknown comparison operator: ${operator}`);
+            }
+        }
+        return comparisonQuery;
+    }
+}
+
+module.exports = BaseClass;
