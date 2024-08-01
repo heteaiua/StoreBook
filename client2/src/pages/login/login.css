@@ -1,13 +1,4 @@
 
-.body {
-    width: auto;
-
-}
-
-* {
-    font-family: Tahoma, sans-serif;
-}
-
 .grid-container {
     display: grid;
     position: relative;
@@ -26,7 +17,7 @@
     transform: translate(-50%, -50%);
 }
 
-.login {
+.login-style {
     border-radius: 8px;
     background: #FEECE2;
     box-shadow: 3px 3px 20px 0px rgba(5, 5, 5, 0.15);
