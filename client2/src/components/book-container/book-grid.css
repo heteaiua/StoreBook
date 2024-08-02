@@ -1,8 +1,47 @@
+
+.bookContainer {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding:60px;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
 .book-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 20px;
     padding: 20px;
     background-color: #f4f4f4;
-    margin:60px;
+
+}
+
+.book-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.toggle-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 14px;
+}
+.filters-container{
+    display:grid;
+    grid-template-columns:1fr 1fr;
 }

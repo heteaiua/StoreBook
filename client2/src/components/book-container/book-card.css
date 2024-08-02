@@ -26,8 +26,8 @@
     width: 100%;
 }
 .book-card:hover {
-    transform: scale(1.02); /* Slightly enlarge the card on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .btn.btn-secondary {
     color: #fff;
@@ -39,25 +39,62 @@
     border-color: #12111057;
 }
 
-.book-title{
+.book-card.book-title{
     background-color: rgba(242, 209, 179, 0.5);
 }
-.book-price{
+.book-card.book-price{
     text-align: right;
     color: red;
     margin-top:10px;
 }
-.book-author{
+.book-card.book-author{
     margin-top:10px;
     text-align:right;
 }
-.book-year{
+.book-card.book-year{
     color:grey;
     text-align:right;
     margin-top:2px;
 }
 
-.book-genre{
+.book-card.book-genre{
     color: #4a332f;
     text-align: left;
+}
+
+
+.book-list .book-title{
+    display: flex;
+    align-items: flex-start;
+    font-size: 20px;
+
+}
+.book-list .book-author{
+    display: flex;
+    align-items: flex-start;
+    font-size: 18px;
+}
+.book-list .book-year{
+    display: flex;
+    align-items: flex-start;
+    font-size: 18px;
+}
+.book-list .book-genre,
+.book-list .book-price {
+color:red;
+}
+
+.book-list .book-buttons {
+    margin-top: 0;
+    margin-left: auto;
+}
+.book-list .book-card{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:space-between;
+}
+.book-list .book-buttons{
+    display:flex;
+    align-items: flex-end;
+    justify-content: flex-end;
 }
