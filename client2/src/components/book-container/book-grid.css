@@ -9,12 +9,14 @@
     display: flex;
     justify-content: flex-end;
     padding: 20px;
-    background-color: #f4f4f4;
+    background: linear-gradient(45deg, whitesmoke,#e0e0e0 );
+    gap: 12px;
 }
 
 .book-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
     background-color: #f4f4f4;
@@ -29,19 +31,43 @@
     background-color: #f4f4f4;
 }
 
-.toggle-button {
+.filters-container{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.navigation-buttons-container {
+    padding-top: 4px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navigation-buttons-container button {
     background-color: #007bff;
-    color: white;
+    color: #fff;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     padding: 10px 20px;
-    font-size: 14px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
-.filters-container{
-    display:grid;
-    grid-template-columns:1fr 1fr;
+
+.navigation-buttons-container button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.navigation-buttons-container button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+.navigation-buttons-container button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }

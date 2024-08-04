@@ -27,9 +27,9 @@ const getBookById = async (req, res, next) => {
 };
 
 const addBook = async (req, res, next) => {
-    const {name, author, year, genre, price} = req.body;
+    const {name, author, year, genre, price, imageURL} = req.body;
     try {
-        const createdBook = await bookService.add({name, author, year, genre, price});
+        const createdBook = await bookService.add({name, author, year, genre, price, imageURL});
         res.status(201).json({message: "New book added!", data: createdBook});
     } catch (err) {
         res.status(500).json({message: "Book creation failed!", error: err.message});
@@ -51,9 +51,9 @@ const deleteBook = async (req, res, next) => {
 
 const updateBook = async (req, res, next) => {
     const bookId = req.params.bookId;
-    const {name, author, year, genre, price} = req.body;
+    const {name, author, year, genre, price,imageURL} = req.body;
     try {
-        const updatedBook = await bookService.update(bookId, {name, author, year, genre, price});
+        const updatedBook = await bookService.update(bookId, {name, author, year, genre, price, imageURL});
         if (!updatedBook) {
             return res.status(204).json({message: "No book found!"});
         }
@@ -79,7 +79,7 @@ const filteredBooks = async (req, res, next) => {
 function parseQueryStringBook(queryString) {
     const params = new URLSearchParams(queryString);
     const filters = {};
-    let sortBy = '_id';
+    let sortBy = 'price';
     let sortOrder = 'asc';
     let page = 1;
     let limit = 10;

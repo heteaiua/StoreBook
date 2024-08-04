@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+.body-layout{
+  height: calc(100vh - 56px);
+  width: 100%;
+  overflow:scroll;
+}
+
+.main-layout{
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+

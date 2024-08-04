@@ -2,29 +2,39 @@ import React, { useEffect, useState } from 'react';
 import './filters.css';
 import axios from 'axios';
 import { FormSelect } from 'react-bootstrap';
+import {getAllBookApi} from "../../endpoints/bookEndpoints";
 
-const Filter = ({ filterType, selectedValue, onFilterChange }) => {
+const Filter = ({ filterType, selectedValue, onFilterChange,shouldSort}) => {
     const [options, setOptions] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const type=filterType==="sortOrder" ? "sort type" : filterType
 
     useEffect(() => {
         const fetchOptions = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/book`);
-                const uniqueOptionsSet = new Set(response.data.data.map(item => item[filterType]));
-                const uniqueOptions = Array.from(uniqueOptionsSet).map(option => ({ [filterType]: option }));
-                setOptions(uniqueOptions);
+                if(shouldSort)
+                    setOptions([{sortOrder: "Cheapest"},{sortOrder:"Expensive"}])
+                        else {
+                    const response = await getAllBookApi();
+                    const uniqueOptionsSet = new Set(response.data.data.map(item => item[filterType]));
+
+                    const uniqueOptions = Array.from(uniqueOptionsSet).map(option => ({[filterType]: option}));
+
+                    setOptions(uniqueOptions);
+                }
+
             } catch (err) {
                 setError('Error fetching options');
                 console.error('Error fetching options:', err);
             } finally {
-                setLoading(false);
+                setIsLoading(false);
             }
         };
 
         fetchOptions();
-    }, [filterType]);
+    }, [filterType,shouldSort]);
 
     const handleChange = (event) => {
         onFilterChange(event.target.value);
@@ -32,9 +42,8 @@ const Filter = ({ filterType, selectedValue, onFilterChange }) => {
 
     return (
         <div className="filter-grid">
-            <div className="left">
-                <label>{filterType.charAt(0).toUpperCase() + filterType.slice(1)}</label>
-                {loading ? (
+                <label className="filter-label">{type}</label>
+                {isLoading ? (
                     <p>Loading {filterType}s...</p>
                 ) : error ? (
                     <p>{error}</p>
@@ -43,8 +52,9 @@ const Filter = ({ filterType, selectedValue, onFilterChange }) => {
                         id={`${filterType}-id`}
                         value={selectedValue}
                         onChange={handleChange}
+                        className="form-select"
                     >
-                        <option value="">Select a {filterType}</option>
+                        <option value="">Select {type}</option>
                         {options.map((option, index) => (
                             <option key={index} value={option[filterType]}>
                                 {option[filterType]}
@@ -52,7 +62,6 @@ const Filter = ({ filterType, selectedValue, onFilterChange }) => {
                         ))}
                     </FormSelect>
                 )}
-            </div>
         </div>
     );
 };
