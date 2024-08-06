@@ -67,10 +67,15 @@ const filteredBooks = async (req, res, next) => {
         const {filters, sortBy, sortOrder, page, limit} = parseQueryStringBook(req.query);
 
         const books = await bookService.getFiltered(filters, sortBy, sortOrder, page, limit);
+        const totalItems=await bookService.getCountedItemsFiltered(filters, sortBy, sortOrder, page, limit)
         if (books.length === 0) {
-            return res.status(204).json({message: "No books found matching the criteria!", data: []});
+            return res.status(204).json({message: "No books found matching the criteria!", data: [],totalItems});
         }
-        res.status(200).json({message: "Filtered books retrieved successfully", data: books});
+        res.status(200).json({
+            message: "Filtered books retrieved successfully",
+            data: books,
+            totalItems:totalItems
+            });
     } catch (err) {
         res.status(500).json({message: "Error! Could not get filtered books!", error: err.message});
     }
@@ -116,6 +121,17 @@ function parseFilterBook(value) {
     else return value;
 
 }
+const getUniqueFields = async (req, res, next) => {
+    try {
+        const books = await bookService.getAllUniqueFields();
+        if (books.length === 0) {
+            return res.status(204).json({message: "No fields found!", data: []});
+        }
+        res.status(200).json({message: "fields retrieved successfully", data: books});
+    } catch (err) {
+        res.status(500).json({message: "Error! Could not get unique fields!", error: err.message});
+    }
+};
 
 
 module.exports = {
@@ -124,5 +140,6 @@ module.exports = {
     addBook,
     deleteBook,
     updateBook,
-    filteredBooks
+    filteredBooks,
+    getUniqueFields
 };

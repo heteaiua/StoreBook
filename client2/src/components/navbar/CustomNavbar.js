@@ -8,12 +8,12 @@ function CustomNavbar() {
     return (
         <Navbar className="nav-style">
             <Container>
-                <Navbar.Brand href="/">BookStore</Navbar.Brand>
+                <Navbar.Brand href="/"><span className="bi bi-shop">BookStore</span></Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
                         <NavItem>
-                            <Nav.Link href="">Books</Nav.Link>
+                            <Nav.Link href="/books">Books</Nav.Link>
                         </NavItem>
                         <NavItem>
                             <Nav.Link href="">Users</Nav.Link>

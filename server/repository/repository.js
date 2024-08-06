@@ -37,6 +37,14 @@ class BaseClass {
             throw new Error("Error in filtering items: " + err.message);
         }
     }
+    async getCountedItemsFiltered(filters = {}, sortBy = '_id', sortOrder = 'asc', page = 1, limit = 10) {
+        try {
+            const query = this.buildQuery(filters);
+            return await this.model.countDocuments(query).exec();
+        } catch (err) {
+            throw new Error("Error in counting filtering items: " + err.message);
+        }
+    }
 
     buildQuery(filters) {
         const query = {};

@@ -6,6 +6,7 @@
     display: grid;
     grid-template-columns: 0.5fr 2fr;
     align-items: center;
+    border-radius: 10px;
 }
 
 .filter-label{
