@@ -20,6 +20,10 @@ class BaseClass {
         return await this.model.findByIdAndDelete(id).exec();
     }
 
+    async deleteAll(){
+        return await this.model.deleteMany({}).exec();
+    }
+
     async update(id, details) {
         return await this.model.findByIdAndUpdate(id, {$set: details}, {new: true}).exec();
     }

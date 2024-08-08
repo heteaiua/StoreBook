@@ -99,3 +99,19 @@
     background-color: #ccc;
     cursor: not-allowed;
 }
+
+#page-limit {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#page-limit:focus {
+    border-color: #ed5808;
+    outline: none;
+}

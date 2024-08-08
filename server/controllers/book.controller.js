@@ -27,9 +27,9 @@ const getBookById = async (req, res, next) => {
 };
 
 const addBook = async (req, res, next) => {
-    const {name, author, year, genre, price, imageURL} = req.body;
+    const {name, author, year, genre, price, imageURL, description} = req.body;
     try {
-        const createdBook = await bookService.add({name, author, year, genre, price, imageURL});
+        const createdBook = await bookService.add({name, author, year, genre, price, imageURL, description});
         res.status(201).json({message: "New book added!", data: createdBook});
     } catch (err) {
         res.status(500).json({message: "Book creation failed!", error: err.message});
@@ -49,11 +49,23 @@ const deleteBook = async (req, res, next) => {
     }
 };
 
+const deleteAllBooks = async (req, res, next) => {
+    try {
+        const result = await bookService.deleteAll();
+        if (result.deletedCount === 0) {
+            return res.status(404).json({message: "No books found to delete!"});
+        }
+        res.status(200).json({message: "All books deleted successfully", data: result});
+    } catch (err) {
+        next(err);
+    }
+};
+
 const updateBook = async (req, res, next) => {
     const bookId = req.params.bookId;
-    const {name, author, year, genre, price,imageURL} = req.body;
+    const {name, author, year, genre, price, imageURL, description} = req.body;
     try {
-        const updatedBook = await bookService.update(bookId, {name, author, year, genre, price, imageURL});
+        const updatedBook = await bookService.update(bookId, {name, author, year, genre, price, imageURL, description});
         if (!updatedBook) {
             return res.status(204).json({message: "No book found!"});
         }
@@ -67,15 +79,15 @@ const filteredBooks = async (req, res, next) => {
         const {filters, sortBy, sortOrder, page, limit} = parseQueryStringBook(req.query);
 
         const books = await bookService.getFiltered(filters, sortBy, sortOrder, page, limit);
-        const totalItems=await bookService.getCountedItemsFiltered(filters, sortBy, sortOrder, page, limit)
+        const totalItems = await bookService.getCountedItemsFiltered(filters, sortBy, sortOrder, page, limit)
         if (books.length === 0) {
-            return res.status(204).json({message: "No books found matching the criteria!", data: [],totalItems});
+            return res.status(204).json({message: "No books found matching the criteria!", data: [], totalItems});
         }
         res.status(200).json({
             message: "Filtered books retrieved successfully",
             data: books,
-            totalItems:totalItems
-            });
+            totalItems: totalItems
+        });
     } catch (err) {
         res.status(500).json({message: "Error! Could not get filtered books!", error: err.message});
     }
@@ -114,13 +126,13 @@ function parseFilterBook(value) {
     } else if (value.includes('-')) {
         const [min, max] = value.split('-').map(Number);
         return {min, max};
-    } else if(!isNaN(parseInt(value))) {
+    } else if (!isNaN(parseInt(value))) {
         const number = Number(value);
         return {min: number, max: number};
-    }
-    else return value;
+    } else return value;
 
 }
+
 const getUniqueFields = async (req, res, next) => {
     try {
         const books = await bookService.getAllUniqueFields();
@@ -141,5 +153,6 @@ module.exports = {
     deleteBook,
     updateBook,
     filteredBooks,
-    getUniqueFields
+    getUniqueFields,
+    deleteAllBooks
 };

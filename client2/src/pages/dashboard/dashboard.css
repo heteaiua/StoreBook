@@ -39,3 +39,10 @@
     cursor: default;
     opacity: 50%;
 }
+
+.dashboard-style {
+    /*background-image: url('https://static.vecteezy.com/system/resources/previews/022/454/671/large_2x/3d-rendering-of-a-little-robot-reading-a-book-in-a-dark-room-generative-ai-free-photo.jpg');*/
+    /*background-size: cover;*/
+    /*background-position: center;*/
+    /*color: rgba(255, 255, 255, 0.3);*/
+}

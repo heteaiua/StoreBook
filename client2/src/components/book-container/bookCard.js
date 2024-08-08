@@ -3,7 +3,6 @@ import {Button} from "react-bootstrap";
 import './book-card.css'
 import {Link} from "react-router-dom";
 
-
 const BookCard = ({propBook}) => {
     const book = propBook || {
         name: 'Unknown Title',
@@ -14,8 +13,8 @@ const BookCard = ({propBook}) => {
         imageURL: "",
     };
 
-    const {name, author, year, genre, price, imageURL} = book
-    console.log(book);
+    const {name, author, year, genre, price, imageURL} = book;
+
     return (
         <div className="book-card">
             <h2 className="book-title">{name}</h2>

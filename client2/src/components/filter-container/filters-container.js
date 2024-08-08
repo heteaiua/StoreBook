@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import Filter from "./filters";
-import { useBooksData } from "../../zustand/book.store";
+import {useBooksData} from "../../zustand/book.store";
 
 const typeTranslator = {
     author: "uniqueAuthors",
@@ -11,27 +11,38 @@ const typeTranslator = {
 };
 
 const filterOptions = [
-    { type: 'author' },
-    { type: 'year' },
-    { type: 'genre' },
-    { type: 'price' },
-    { type: 'sortOrder' }
+    {type: 'author'},
+    {type: 'year'},
+    {type: 'genre'},
+    {type: 'price'},
+    {type: 'sortOrder'}
 ];
 
 export const FiltersContainer = () => {
-    const { selectOptions = [], resetFilters, setFilters, getQueryParams, queryParamsString, getFilteredBooks, filters, page ,countSelectedFilters} = useBooksData();
+
+    const {
+        selectOptions = [],
+        resetFilters,
+        setFilters,
+        setQueryParams,
+        queryParamsString,
+        getFilteredBooks,
+        filters,
+        page,
+        countSelectedFilters,
+        fetchOptionList,
+        limit,
+        setItemsLimitPerPage,
+    } = useBooksData();
 
     const handleFilterChange = (filterType) => (value) => {
         setFilters(filterType, value);
     };
 
     useEffect(() => {
-        getQueryParams(5, page, filters);
-    }, [filters, page, getQueryParams]);
+        fetchOptionList();
+    }, []);
 
-    useEffect(() => {
-        getFilteredBooks();
-    }, [queryParamsString, getFilteredBooks]);
 
     return (
         <div className="filters-container">
@@ -47,6 +58,7 @@ export const FiltersContainer = () => {
             <div className="filters-count">
                 {countSelectedFilters()} filter{countSelectedFilters() === 1 ? '' : 's'} selected
             </div>
+
             <button className='btn-reset-filters' onClick={resetFilters}>
                 <i className="bi bi-arrow-clockwise"></i>
             </button>
