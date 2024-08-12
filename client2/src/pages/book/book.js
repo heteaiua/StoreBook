@@ -7,7 +7,7 @@ import {useOrderdata} from "../../zustand/order.store";
 
 const BookDetails = () => {
     const {id} = useParams();
-    const {fetchBookById, bookDetails, loading, error} = useBooksData();
+    const {fetchBookById, bookDetails} = useBooksData();
     const {addBookToCart} = useOrderdata();
     const navigate = useNavigate();
 

@@ -1,5 +1,4 @@
 const bookService = require("../services/book.service");
-const userService = require("../services/user.service");
 
 const getAllBooks = async (req, res) => {
     try {
@@ -133,7 +132,7 @@ function parseFilterBook(value) {
 
 }
 
-const getUniqueFields = async (req, res, next) => {
+const getUniqueFields = async (req, res) => {
     try {
         const books = await bookService.getAllUniqueFields();
         if (books.length === 0) {

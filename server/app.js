@@ -1,4 +1,3 @@
-const {MongoClient} = require('mongodb');
 const bookRoutes = require("./routes/book.routes");
 const userRoutes = require("./routes/user.routes");
 const orderRoutes = require("./routes/order.routes");
@@ -7,7 +6,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 
-// Load environment variables from .env file
 require('dotenv').config();
 
 async function main() {
