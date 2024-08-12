@@ -3,13 +3,27 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {useBooksData} from '../../zustand/book.store';
 import './bookDetails.css'
 import {Button} from "react-bootstrap";
+import {useOrderdata} from "../../zustand/order.store";
 
 const BookDetails = () => {
     const {id} = useParams();
     const {fetchBookById, bookDetails, loading, error} = useBooksData();
+    const {addBookToCart} = useOrderdata();
     const navigate = useNavigate();
+
     const handleBackClick = () => {
         navigate('/books');
+    };
+
+    const handleAddToCart = async () => {
+        if (bookDetails) {
+            try {
+                await addBookToCart(bookDetails);
+                alert('Book has been added!');
+            } catch (error) {
+                alert('Book add failed.');
+            }
+        }
     };
 
     useEffect(() => {
@@ -44,7 +58,7 @@ const BookDetails = () => {
                 </div>
 
 
-                <Button className="btn btn-secondary">Add to Cart</Button>
+                <Button className="btn btn-secondary" onClick={handleAddToCart}>Add to Cart</Button>
             </div>
         </div>
 

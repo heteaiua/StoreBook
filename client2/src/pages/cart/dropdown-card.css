@@ -1,0 +1,34 @@
+.dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto;
+    width: 300px;
+}
+
+.dropdown-order {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.dropdown-order-id {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.dropdown-items {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 3px;
+    background-color: #f8f9fa;
+}
+
+.dropdown-order-date {
+    margin-top: 10px;
+}

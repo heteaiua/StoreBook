@@ -18,14 +18,17 @@ export const PaginationControls = () => {
     }
 
     return (
-        <div className="navigation-buttons-container">
-            <button onClick={prevPage} disabled={page === 1}>
-                Prev
-            </button>
-            <span>{page} / {totalPages}</span>
-            <button onClick={nextPage} disabled={page === totalPages}>
-                Next
-            </button>
+        <div className="pagination-container">
+            <div className="navigation-buttons-container">
+                <button onClick={prevPage} disabled={page === 1}>
+                    Prev
+                </button>
+                <span>{page} / {totalPages}</span>
+                <button onClick={nextPage} disabled={page === totalPages}>
+                    Next
+                </button>
+
+            </div>
             <select id="page-limit" value={limit} onChange={handleItemsPerPageChange}>
                 {itemsPerPageLimit.map(limit => (
                     <option key={limit} value={limit}>
@@ -34,5 +37,7 @@ export const PaginationControls = () => {
                 ))}
             </select>
         </div>
-    );
+
+    )
+        ;
 };

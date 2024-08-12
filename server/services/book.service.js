@@ -10,7 +10,7 @@ class BookService extends BaseClass {
                 fields.map(field => BookModel.distinct(field).exec())
             );
 
-            const uniqueSortOrder=["Cheapest","Expensive"]
+            const uniqueSortOrder = ["Cheapest", "Expensive"]
             return {
                 uniqueAuthors,
                 uniqueGenres,

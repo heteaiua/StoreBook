@@ -1,7 +1,7 @@
 const bookService = require("../services/book.service");
 const userService = require("../services/user.service");
 
-const getAllBooks = async (req, res, next) => {
+const getAllBooks = async (req, res) => {
     try {
         const books = await bookService.getAll();
         if (books.length === 0) {
@@ -13,7 +13,7 @@ const getAllBooks = async (req, res, next) => {
     }
 };
 
-const getBookById = async (req, res, next) => {
+const getBookById = async (req, res) => {
     const bookId = req.params.bookId;
     try {
         const book = await bookService.getById(bookId);
@@ -26,7 +26,7 @@ const getBookById = async (req, res, next) => {
     }
 };
 
-const addBook = async (req, res, next) => {
+const addBook = async (req, res) => {
     const {name, author, year, genre, price, imageURL, description} = req.body;
     try {
         const createdBook = await bookService.add({name, author, year, genre, price, imageURL, description});
@@ -36,7 +36,7 @@ const addBook = async (req, res, next) => {
     }
 };
 
-const deleteBook = async (req, res, next) => {
+const deleteBook = async (req, res) => {
     const bookId = req.params.bookId;
     try {
         const book = await bookService.delete(bookId);
@@ -61,7 +61,7 @@ const deleteAllBooks = async (req, res, next) => {
     }
 };
 
-const updateBook = async (req, res, next) => {
+const updateBook = async (req, res) => {
     const bookId = req.params.bookId;
     const {name, author, year, genre, price, imageURL, description} = req.body;
     try {
@@ -74,7 +74,7 @@ const updateBook = async (req, res, next) => {
         res.status(500).json({message: "Error! Could not update book!", error: err.message});
     }
 };
-const filteredBooks = async (req, res, next) => {
+const filteredBooks = async (req, res) => {
     try {
         const {filters, sortBy, sortOrder, page, limit} = parseQueryStringBook(req.query);
 
