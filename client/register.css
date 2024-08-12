@@ -28,7 +28,7 @@
     background: #E2BFB3;
 }
 
-.container {
+.register-container {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -42,10 +42,7 @@
     width: fit-content;
     height: fit-content;
     box-sizing: border-box;
-    padding-left:50px;
-    padding-right:40px;
-    padding-top:10px;
-    padding-bottom:10px;
+    padding: 10px 40px 10px 50px;
 }
 
 .form {
@@ -166,4 +163,29 @@
     margin-left: 10px;
     font-size: 20px;
     color: #987070;
+}
+
+.btn-outline-secondary {
+    margin-left: 5px;
+}
+
+.form-group label {
+    color: #987070;
+}
+
+.label-form {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.align-content-center {
+    margin: 0;
+    font-size: 24px;
+    color: #987070;
+}
+
+.logo .img-logo {
+    max-width: 220px;
+    display: block;
+    margin: 0 auto 20px;
 }
