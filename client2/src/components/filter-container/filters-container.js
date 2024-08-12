@@ -24,15 +24,9 @@ export const FiltersContainer = () => {
         selectOptions = [],
         resetFilters,
         setFilters,
-        setQueryParams,
-        queryParamsString,
-        getFilteredBooks,
         filters,
-        page,
         countSelectedFilters,
         fetchOptionList,
-        limit,
-        setItemsLimitPerPage,
     } = useBooksData();
 
     const handleFilterChange = (filterType) => (value) => {

@@ -67,7 +67,14 @@
     color: #ed5808;
 }
 
+.pagination-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
 .navigation-buttons-container {
+
     padding-top: 4px;
     width: 100%;
     display: flex;
@@ -101,6 +108,7 @@
 }
 
 #page-limit {
+    margin-left:10px;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;

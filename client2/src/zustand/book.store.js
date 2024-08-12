@@ -85,7 +85,6 @@ export const useBooksData = create((set, get) => ({
             });
 
             const response = await getAllBookFilteredApi(queryParams);
-            console.log(response.data.data)
             set({
                 filteredBooks: response.data.data,
                 totalItems: response.data.totalItems || 0,
@@ -141,11 +140,13 @@ export const useBooksData = create((set, get) => ({
             set({loading: true});
             try {
                 const response = await getBookByIdApi(id);
-                bookCache[id] = response.data.data
+                bookCache[id] = response.data.data;
 
                 set(state => ({
                     bookCache: bookCache,
                 }));
+                localStorage.setItem('bookCache', JSON.stringify(bookCache));
+
             } catch (error) {
                 set({error: true});
             } finally {

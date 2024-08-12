@@ -2,6 +2,7 @@ import React from 'react'
 import {Button} from "react-bootstrap";
 import './book-card.css'
 import {Link} from "react-router-dom";
+import {useOrderdata} from "../../zustand/order.store";
 
 const BookCard = ({propBook}) => {
     const book = propBook || {
@@ -11,10 +12,16 @@ const BookCard = ({propBook}) => {
         genre: 'Unknown Genre',
         price: '0.00',
         imageURL: "",
+        _id: ''
     };
 
     const {name, author, year, genre, price, imageURL} = book;
+    const {addBookToCart} = useOrderdata();
 
+    const handleAddToCart = () => {
+        addBookToCart(book);
+        alert('Book added to cart!');
+    };
     return (
         <div className="book-card">
             <h2 className="book-title">{name}</h2>
@@ -29,7 +36,7 @@ const BookCard = ({propBook}) => {
             </div>
             <div className="book-buttons">
                 <Link to={`/books/${book._id}`} className="btn btn-secondary">View Details</Link>
-                <Button className="btn btn-secondary">Add to Cart</Button>
+                <Button className="btn btn-secondary" onClick={handleAddToCart}>Add to Cart</Button>
             </div>
 
         </div>

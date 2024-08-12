@@ -11,13 +11,12 @@ export const BookCardsSection = () => {
         filteredBooks,
         loading,
         error,
-        queryParamsString,
         getFilteredBooks,
     } = useBooksData();
-    const {page, limit,filters} = useBooksData(state => ({
+    const {page, limit, filters} = useBooksData(state => ({
         page: state.page,
         limit: state.limit,
-       filters: state.filters,
+        filters: state.filters,
     }));
 
     const handleViewToggle = () => {
@@ -26,7 +25,7 @@ export const BookCardsSection = () => {
 
     useEffect(() => {
         getFilteredBooks();
-    }, [page, limit,filters]);
+    }, [page, limit, filters]);
 
     if (loading) {
         return <p>Loading books...</p>;
@@ -57,9 +56,8 @@ export const BookCardsSection = () => {
                     <p>No books available</p>
                 )}
             </div>
-            <div className="navigation-buttons-container">
-                <PaginationControls/>
-            </div>
+
+            <PaginationControls/>
         </>
     );
 };
