@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-
-const orderSchema = new mongoose.Schema({
-    items: [{
+const itemSchema = new mongoose.Schema(
+    {
         bookId: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
@@ -15,13 +14,21 @@ const orderSchema = new mongoose.Schema({
         price: {
             type: Number,
             required: true,
-        }
-    }],
+        },
+    }, {_id: false}
+)
+const orderSchema = new mongoose.Schema({
+    items: [{type: itemSchema}],
     date: {
         default: Date.now,
         type: Date,
         required: true
     },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "User",
+    }
 });
 
 const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
