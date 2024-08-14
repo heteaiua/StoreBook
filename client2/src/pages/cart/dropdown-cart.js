@@ -2,7 +2,7 @@ import {useState} from "react";
 import './dropdown-card.css'
 import {useOrderdata} from "../../zustand/order.store";
 
-export default function DropdownCart() {
+export default function DropdownCart({userId}) {
     const [isOpen, setIsOpen] = useState(false);
     const {cartItems, sendOrder, loading, error, getTotalPrice, incrementQuantity, decrementQuantity} = useOrderdata();
     const totalPrice = getTotalPrice();
@@ -11,9 +11,14 @@ export default function DropdownCart() {
     };
     const handleSendOrder = async () => {
         try {
-            await sendOrder();
+            if (!userId) {
+                alert('User ID is required to place an order.');
+                return;
+            }
+            await sendOrder(userId);
             alert('Order has been sent!');
-        } catch (error) {
+        } catch (err) {
+            console.error('Order failed:', err);
             alert('Order failed.');
         }
     };

@@ -1,0 +1,98 @@
+* {
+    font-family: Tahoma, sans-serif;
+}
+
+.img-logo {
+    max-width: 50%;
+    max-height: 50%;
+}
+
+.register-label-form {
+    font-size: 20px;
+    color: #987070;
+}
+
+.register-grid-container {
+    display: grid;
+    position: relative;
+    grid-template-rows: 1fr 1fr;
+    height: 100vh;
+}
+
+.register-up {
+    background: #E2BFB3;
+}
+
+.register-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.register-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 8px;
+    background: #FEECE2;
+    box-shadow: 3px 3px 20px 0px rgba(5, 5, 5, 0.15);
+    width: 500px;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.form-wrapper-register {
+    width: 100%;
+
+}
+
+.register-form-group {
+    margin-bottom: 19px;
+}
+
+.register-form-group label {
+    color: #987070;
+    font-size: 20px;
+}
+
+.register-form-group .form-control {
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.register-password-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register-form-submit {
+    margin-bottom: 10px;
+}
+
+.register-login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register-login-form label {
+    font-size: 18px;
+    color: #987070;
+}
+
+.register-login-form .btn {
+    margin-left: 5px;
+    font-size: 18px;
+    color: #987070;
+}
+
+.register-align-content-center {
+    margin: 20px;
+    font-size: 24px;
+    color: #987070;
+    text-align: center;
+}
+
+

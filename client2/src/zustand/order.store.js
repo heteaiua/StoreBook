@@ -1,10 +1,11 @@
 import {create} from 'zustand';
-import {addBookToCartApi, getAllOrderApi} from '../endpoints/orderEndpoints';
+import {addBookToCartApi, getAllOrderApi, getOrderByUserIdApi} from '../endpoints/orderEndpoints';
 
 export const useOrderdata = create((set, get) => ({
     loading: false,
     error: false,
-    data: [],
+    orders: [],
+    userOrders: [],
     cartItems: [],
     fetchOrders: async () => {
         set({loading: true});
@@ -12,7 +13,7 @@ export const useOrderdata = create((set, get) => ({
             const response = await getAllOrderApi();
             const orders = response.data.data;
             console.log("Fetched orders:", orders);
-            set({data: orders});
+            set({orders: orders});
         } catch (err) {
             console.error("Error fetching orders:", err);
             set({error: true});
@@ -41,16 +42,24 @@ export const useOrderdata = create((set, get) => ({
             };
         }
     }),
-    sendOrder: async () => {
+    sendOrder: async (userId) => {
         set({loading: true});
+        const {cartItems} = get();
+        if (!userId) {
+            throw new Error('User ID is required to place an order.');
+        }
+        if (cartItems.length === 0) {
+            throw new Error('Cart is empty. Cannot place an order.');
+        }
         try {
-            const {cartItems} = get();
+
 
             const response = await addBookToCartApi({
                 items: cartItems,
                 date: new Date().toISOString(),
+                userId
             });
-
+            console.log(response.data)
             set({cartItems: []});
             console.log("Order made", response.data);
             return response.data;
@@ -91,4 +100,18 @@ export const useOrderdata = create((set, get) => ({
             }
         }
     }),
+    getOrderByUserId: async (userId) => {
+        set({loading: true});
+        try {
+            const response = await getOrderByUserIdApi(userId);
+            const orders = response.data.data;
+            console.log("Fetched orders:", orders);
+            set({userOrders: orders});
+        } catch (err) {
+            console.error("Error fetching orders:", err);
+            set({error: true});
+        } finally {
+            set({loading: false});
+        }
+    },
 }));

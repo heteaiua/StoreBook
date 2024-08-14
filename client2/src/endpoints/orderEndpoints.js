@@ -10,3 +10,4 @@ export const addBookToCartApi = async (orderData) => {
         throw error;
     }
 };
+export const getOrderByUserIdApi = async (userId) => axios.get(`${orderURL}/user/${userId}`);

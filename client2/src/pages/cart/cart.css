@@ -1,0 +1,33 @@
+.order-page {
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.order-page h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+}
+
+.table ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.table li {
+    margin-bottom: 5px;
+}

@@ -26,8 +26,25 @@ const getOrderById = async (req, res) => {
     }
 };
 
+const getOrderByUserId = async (req, res) => {
+    const {userId} = req.params;
+    if (!userId) {
+        return res.status(400).json({message: 'User ID is required.'});
+    }
+    try {
+        const order = await orderService.getByUserId(userId);
+        if (!order) {
+            return res.status(204).json({message: "No order found by user!"});
+        }
+        res.status(200).json({message: "Order retrieved successfully by user", data: order});
+    } catch (err) {
+        res.status(500).json({message: "Error! Could not get order by User id!", error: err.message});
+    }
+};
+
+
 const addOrder = async (req, res) => {
-    const {items, date} = req.body;
+    const {items, date, userId} = req.body;
     if (!Array.isArray(items) || items.length === 0) {
         return res.status(400).json({message: 'Order must contain at least one item.'});
     }
@@ -40,6 +57,7 @@ const addOrder = async (req, res) => {
         const createdOrder = await orderService.add({
             items,
             date,
+            userId
         });
         res.status(201).json({message: 'New order added!', data: createdOrder});
     } catch (err) {
@@ -75,8 +93,9 @@ const deleteAllOrders = async (req, res, next) => {
 const updateOrder = async (req, res) => {
     const orderId = req.params.orderId;
     const {items, date} = req.body;
+    const userId = req.params.userId;
     try {
-        const updatedOrder = await orderService.update(orderId, {items, date});
+        const updatedOrder = await orderService.update(orderId, {items, date}, userId);
         if (!updatedOrder) {
             return res.status(204).json({message: "No order found!"});
         }
@@ -92,5 +111,6 @@ module.exports = {
     addOrder,
     deleteOrder,
     deleteAllOrders,
-    updateOrder
+    updateOrder,
+    getOrderByUserId
 }

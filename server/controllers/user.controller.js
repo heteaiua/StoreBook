@@ -1,6 +1,6 @@
 const userService = require("../services/user.service");
-const bookService = require("../services/book.service");
-
+const UserModel = require("../models/user");
+const mongoose = require('mongoose');
 const getAllUsers = async (req, res, next) => {
     try {
         const users = await userService.getAll();
@@ -13,21 +13,28 @@ const getAllUsers = async (req, res, next) => {
     }
 };
 
-const getUserById = async (req, res, next) => {
-    const userId = req.params.userId;
+const getUserById = async (req, res) => {
+    const {userId} = req.params;
+
     try {
-        const user = await userService.getById(userId);
-        if (!user) {
-            return res.status(204).json({message: "No user found!"});
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({message: "Invalid user ID format"});
         }
-        res.status(200).json({message: "User retrieved successfully", data: user});
+
+        const user = await UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({message: "User not found"});
+        }
+
+        res.status(200).json(user);
     } catch (err) {
         res.status(500).json({message: "Error! Could not get user by id!", error: err.message});
     }
 };
 
 const addUser = async (req, res, next) => {
-    const {firstName, lastName, email, password, confirmPassword, age, address, phoneNumber} = req.body;
+    const {firstName, lastName, email, password, age, address, phoneNumber} = req.body;
     try {
         const existingUsers = await userService.getAll();
         const usedEmail = existingUsers.find((user) => user.email === email);
@@ -41,7 +48,6 @@ const addUser = async (req, res, next) => {
             lastName,
             email,
             password,
-            confirmPassword,
             age,
             address,
             phoneNumber
@@ -53,7 +59,7 @@ const addUser = async (req, res, next) => {
 };
 
 const deleteUser = async (req, res, next) => {
-    const userId = req.params.userId;
+    const {userId} = req.params;
     try {
         const user = await userService.delete(userId);
         if (!user) {
@@ -65,8 +71,19 @@ const deleteUser = async (req, res, next) => {
     }
 };
 
+const deleteAllUsers = async (req, res, next) => {
+    try {
+        const result = await userService.deleteAll();
+        if (result.deletedCount === 0) {
+            return res.status(404).json({message: "No users found to delete!"});
+        }
+        res.status(200).json({message: "All users deleted successfully", data: result});
+    } catch (err) {
+        next(err);
+    }
+};
 const updateUser = async (req, res, next) => {
-    const userId = req.params.userId;
+    const {userId} = req.params;
     const {firstName, lastName, email, password, confirmPassword, age, address, phoneNumber} = req.body;
     try {
         const updatedUser = await userService.update(userId, {
@@ -74,7 +91,6 @@ const updateUser = async (req, res, next) => {
             lastName,
             email,
             password,
-            confirmPassword,
             age,
             address,
             phoneNumber
@@ -134,11 +150,10 @@ function parseFilter(value) {
     } else if (value.includes('-')) {
         const [min, max] = value.split('-').map(Number);
         return {min, max};
-    } else if(!isNaN(parseInt(value))) {
+    } else if (!isNaN(parseInt(value))) {
         const number = Number(value);
         return {min: number, max: number};
-    }
-    else return value;
+    } else return value;
 
 }
 
@@ -149,5 +164,6 @@ module.exports = {
     addUser,
     deleteUser,
     updateUser,
-    filteredUsers
+    filteredUsers,
+    deleteAllUsers
 };
