@@ -1,7 +1,7 @@
 const userService = require("../services/user.service");
 const UserModel = require("../models/user");
 const mongoose = require('mongoose');
-const getAllUsers = async (req, res, next) => {
+const getAllUsers = async (req, res) => {
     try {
         const users = await userService.getAll();
         if (users.length === 0) {
@@ -33,7 +33,7 @@ const getUserById = async (req, res) => {
     }
 };
 
-const addUser = async (req, res, next) => {
+const addUser = async (req, res) => {
     const {firstName, lastName, email, password, age, address, phoneNumber} = req.body;
     try {
         const existingUsers = await userService.getAll();
@@ -58,7 +58,7 @@ const addUser = async (req, res, next) => {
     }
 };
 
-const deleteUser = async (req, res, next) => {
+const deleteUser = async (req, res) => {
     const {userId} = req.params;
     try {
         const user = await userService.delete(userId);
@@ -82,7 +82,7 @@ const deleteAllUsers = async (req, res, next) => {
         next(err);
     }
 };
-const updateUser = async (req, res, next) => {
+const updateUser = async (req, res) => {
     const {userId} = req.params;
     const {firstName, lastName, email, password, confirmPassword, age, address, phoneNumber} = req.body;
     try {
@@ -103,7 +103,7 @@ const updateUser = async (req, res, next) => {
         res.status(500).json({message: "Error! Could not update user!", error: err.message});
     }
 };
-const filteredUsers = async (req, res, next) => {
+const filteredUsers = async (req, res) => {
     try {
         const {filters, sortBy, sortOrder, page, limit} = parseQueryString(req.query);
 

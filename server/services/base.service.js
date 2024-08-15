@@ -20,19 +20,20 @@ class BaseClass {
         return await this.model.findByIdAndDelete(id).exec();
     }
 
-    async deleteAll(){
+    async deleteAll() {
         return await this.model.deleteMany({}).exec();
     }
 
     async update(id, details) {
         return await this.model.findByIdAndUpdate(id, {$set: details}, {new: true}).exec();
     }
+
     async getFiltered(filters = {}, sortBy = '_id', sortOrder = 'asc', page = 1, limit = 10) {
         try {
             const query = this.buildQuery(filters);
             const skip = (page - 1) * limit;
             const items = await this.model.find(query)
-                .sort({ [sortBy]: sortOrder })
+                .sort({[sortBy]: sortOrder})
                 .skip(skip)
                 .limit(limit)
                 .exec();
@@ -41,6 +42,7 @@ class BaseClass {
             throw new Error("Error in filtering items: " + err.message);
         }
     }
+
     async getCountedItemsFiltered(filters = {}, sortBy = '_id', sortOrder = 'asc', page = 1, limit = 10) {
         try {
             const query = this.buildQuery(filters);

@@ -51,6 +51,7 @@ const BookDetails = () => {
                         <p><strong>Year:</strong> {bookDetails.year}</p>
                         <p><strong>Genre:</strong> {bookDetails.genre}</p>
                         <p><strong>Price:</strong> {bookDetails.price} RON</p>
+                        <p><strong>StockQuantity:</strong> {bookDetails.stockQuantity} </p>
                     </div>
                     <div className="book-description">
                         <p>{bookDetails.description}.</p>

@@ -15,7 +15,6 @@ export const getCurrentUser = async () => {
                 Authorization: `Bearer ${token}`
             }
         });
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('Failed to fetch current user:', error);
@@ -32,7 +31,6 @@ export const updateUserAPI = async (userId, updates) => {
         });
         return response.data;
     } catch (error) {
-        console.error('Failed to update user:', error);
         throw error;
     }
 };

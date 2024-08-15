@@ -1,4 +1,4 @@
-const BaseClass = require("../repository/repository");
+const BaseClass = require("./base.service");
 const UserModel = require("../models/user");
 
 class UserService extends BaseClass {

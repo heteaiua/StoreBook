@@ -1,5 +1,11 @@
 import {create} from "zustand";
-import {getAllBookApi, getAllBookFilteredApi, getBookByIdApi, getUniqueFieldsApi} from "../endpoints/bookEndpoints";
+import {
+    getAllBookApi,
+    getAllBookFilteredApi,
+    getBookByIdApi,
+    getUniqueFieldsApi,
+    updateBookApi
+} from "../endpoints/bookEndpoints";
 
 const initialState = {
     loading: false,
@@ -156,5 +162,25 @@ export const useBooksData = create((set, get) => ({
 
         set({bookDetails: bookCache[id]});
     },
+    
+    updateBook: async (id, updatedData) => {
+        set({loading: true});
+        try {
+            const response = await updateBookApi(id, updatedData);
+            const updatedBook = response.data.data;
 
+            set(state => {
+                const updatedBookCache = {...state.bookCache, [id]: updatedBook};
+                return {
+                    bookCache: updatedBookCache,
+                    data: state.data.map(book => book._id === id ? updatedBook : book)
+                };
+            });
+        } catch (error) {
+            console.error("Error updating book:", error);
+            set({error: true});
+        } finally {
+            set({loading: false});
+        }
+    },
 }));
