@@ -30,7 +30,6 @@ export const useAuth = create((set, get) => ({
                 set({error: null});
             }
             const updatedUser = await updateUserAPI(updates._id, updates);
-            console.log(updatedUser);
             if (updatedUser && updatedUser.data) {
                 set({user: updatedUser.data, editMode: false, error: null});
             }

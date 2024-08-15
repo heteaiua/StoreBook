@@ -3,14 +3,20 @@ import './user.css'
 import {useAuth} from "../../zustand/user.store";
 import UserOrdersComponent from "../../components/user-order-container/user-order";
 
+const initializeFormData = (user) => ({
+    firstName: user.firstName || '',
+    lastName: user.lastName || '',
+    email: user.email || '',
+    address: user.address || '',
+    phoneNumber: user.phoneNumber || '',
+});
+
 const UserProfile = () => {
     const [formData, setFormData] = useState({});
     const {
         user,
-        error,
         editMode,
         toggleEditMode,
-        fetchUser,
         updateUser,
     } = useAuth(state => ({
         user: state.user,
@@ -21,19 +27,10 @@ const UserProfile = () => {
         toggleEditMode: state.toggleEditMode,
     }));
 
-    useEffect(() => {
-        fetchUser();
-    }, []);
 
     useEffect(() => {
         if (user) {
-            setFormData({
-                firstName: user.firstName || '',
-                lastName: user.lastName || '',
-                email: user.email || '',
-                address: user.address || '',
-                phoneNumber: user.phoneNumber || '',
-            });
+            setFormData(initializeFormData(user));
         }
     }, [user]);
 
@@ -52,13 +49,7 @@ const UserProfile = () => {
 
     const handleCancelClick = () => {
         toggleEditMode();
-        setFormData({
-            firstName: user.firstName || '',
-            lastName: user.lastName || '',
-            email: user.email || '',
-            address: user.address || '',
-            phoneNumber: user.phoneNumber || '',
-        });
+        setFormData(initializeFormData(user));
     };
     return (
         <div className={""}>
@@ -126,9 +117,7 @@ const UserProfile = () => {
                 )}
             </div>
             <div className="user-book-section">
-                <div className="user-book-section">
-                    {user && <UserOrdersComponent userId={user._id}/>}
-                </div>
+                {user && <UserOrdersComponent userId={user._id}/>}
             </div>
         </div>
 

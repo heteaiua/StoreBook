@@ -1,11 +1,13 @@
 import {useState} from "react";
 import './dropdown-card.css'
 import {useOrderdata} from "../../zustand/order.store";
+import {useNavigate} from "react-router-dom";
 
 export default function DropdownCart({userId}) {
     const [isOpen, setIsOpen] = useState(false);
     const {cartItems, sendOrder, loading, error, getTotalPrice, incrementQuantity, decrementQuantity} = useOrderdata();
     const totalPrice = getTotalPrice();
+    const navigate = useNavigate();
     const handleToggle = () => {
         setIsOpen(!isOpen);
     };
@@ -13,6 +15,7 @@ export default function DropdownCart({userId}) {
         try {
             if (!userId) {
                 alert('User ID is required to place an order.');
+                navigate('/login');
                 return;
             }
             await sendOrder(userId);

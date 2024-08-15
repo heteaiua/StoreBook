@@ -1,33 +1,33 @@
 import React, {useEffect} from 'react';
 import {useOrderdata} from "../../zustand/order.store";
+import OrdersTable from "../order-table/order-table";
+import {LoadingErrorHandler} from "../loading-error-handler/loading-error-handler";
 
 const UserOrdersComponent = ({userId}) => {
-    const {userOrders = [], loading, error, getOrderByUserId} = useOrderdata();
+    const {userOrders = [], loading, error, getOrderByUserId} = useOrderdata(state => ({
+        userOrders: state.userOrders,
+        loading: state.loading,
+        error: state.error,
+        getOrderByUserId: state.getOrderByUserId
+    }));
 
     useEffect(() => {
         if (userId) {
             getOrderByUserId(userId);
         }
-    }, [userId, getOrderByUserId]);
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error loading orders.</div>;
+    }, [userId]);
 
     return (
-        <div>
-            <h1>Orders</h1>
-            {userOrders.length === 0 ? (
-                <p>No orders found.</p>
-            ) : (
-                <ul>
-                    {userOrders.map((order) => (
-                        <li key={order._id}>
-                            Order ID: {order._id}, Date: {new Date(order.date).toLocaleDateString()}
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
+        <LoadingErrorHandler loading={loading} error={error}>
+            <div className="order-page">
+                <h1>Orders</h1>
+                {userOrders.length === 0 ? (
+                    <p>No orders found.</p>
+                ) : (
+                    <OrdersTable orders={userOrders}/>
+                )}
+            </div>
+        </LoadingErrorHandler>
     );
 };
 

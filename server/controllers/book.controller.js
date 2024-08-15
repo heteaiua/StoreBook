@@ -26,9 +26,18 @@ const getBookById = async (req, res) => {
 };
 
 const addBook = async (req, res) => {
-    const {name, author, year, genre, price, imageURL, description} = req.body;
+    const {name, author, year, genre, price, imageURL, description, stockQuantity} = req.body;
     try {
-        const createdBook = await bookService.add({name, author, year, genre, price, imageURL, description});
+        const createdBook = await bookService.add({
+            name,
+            author,
+            year,
+            genre,
+            price,
+            imageURL,
+            description,
+            stockQuantity
+        });
         res.status(201).json({message: "New book added!", data: createdBook});
     } catch (err) {
         res.status(500).json({message: "Book creation failed!", error: err.message});
@@ -62,9 +71,18 @@ const deleteAllBooks = async (req, res, next) => {
 
 const updateBook = async (req, res) => {
     const bookId = req.params.bookId;
-    const {name, author, year, genre, price, imageURL, description} = req.body;
+    const {name, author, year, genre, price, imageURL, description, stockQuantity} = req.body;
     try {
-        const updatedBook = await bookService.update(bookId, {name, author, year, genre, price, imageURL, description});
+        const updatedBook = await bookService.update(bookId, {
+            name,
+            author,
+            year,
+            genre,
+            price,
+            imageURL,
+            description,
+            stockQuantity
+        });
         if (!updatedBook) {
             return res.status(204).json({message: "No book found!"});
         }

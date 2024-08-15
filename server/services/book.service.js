@@ -1,4 +1,4 @@
-const BaseClass = require("../repository/repository");
+const BaseClass = require("./base.service");
 const BookModel = require("../models/book");
 
 class BookService extends BaseClass {
