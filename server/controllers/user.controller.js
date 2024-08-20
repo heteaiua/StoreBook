@@ -165,5 +165,5 @@ module.exports = {
     deleteUser,
     updateUser,
     filteredUsers,
-    deleteAllUsers
+    deleteAllUsers,
 };

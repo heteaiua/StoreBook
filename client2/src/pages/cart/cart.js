@@ -19,7 +19,7 @@ export default function ShoppingCart() {
     return (
         <LoadingErrorHandler loading={loading} error={error}>
             <div className="order-page">
-                <h1>Orders</h1>
+                <h1 className="welcome-message">Orders</h1>
                 {orders.length === 0 ? (
                     <p>No orders found.</p>
                 ) : (

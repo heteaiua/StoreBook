@@ -19,14 +19,12 @@ const UserOrdersComponent = ({userId}) => {
 
     return (
         <LoadingErrorHandler loading={loading} error={error}>
-            <div className="order-page">
-                <h1>Orders</h1>
-                {userOrders.length === 0 ? (
-                    <p>No orders found.</p>
-                ) : (
-                    <OrdersTable orders={userOrders}/>
-                )}
-            </div>
+            <h1 className="welcome-message">Orders</h1>
+            {userOrders.length === 0 ? (
+                <p>No orders found.</p>
+            ) : (
+                <OrdersTable orders={userOrders}/>
+            )}
         </LoadingErrorHandler>
     );
 };

@@ -23,6 +23,7 @@ class BookService extends BaseClass {
             throw new Error(`Failed to retrieve unique values: ${error.message}`);
         }
     }
+    
 }
 
 module.exports = new BookService(BookModel);

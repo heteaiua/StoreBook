@@ -2,13 +2,13 @@ import React from 'react';
 import {useBooksData} from '../../zustand/book.store';
 
 export const PaginationControls = () => {
-    const {page, totalItems, limit, nextPage, prevPage,setItemsLimitPerPage} = useBooksData(state => ({
+    const {page, totalItems, limit, nextPage, prevPage, setItemsLimitPerPage} = useBooksData(state => ({
         page: state.page,
         totalItems: state.totalItems,
         limit: state.limit,
         nextPage: state.nextPage,
         prevPage: state.prevPage,
-        setItemsLimitPerPage:state.setItemsLimitPerPage
+        setItemsLimitPerPage: state.setItemsLimitPerPage
     }));
     const itemsPerPageLimit = [5, 10, 15, 20];
     const totalPages = totalItems === 0 ? 1 : Math.ceil(totalItems / limit);
@@ -27,7 +27,6 @@ export const PaginationControls = () => {
                 <button onClick={nextPage} disabled={page === totalPages}>
                     Next
                 </button>
-
             </div>
             <select id="page-limit" value={limit} onChange={handleItemsPerPageChange}>
                 {itemsPerPageLimit.map(limit => (
@@ -37,7 +36,5 @@ export const PaginationControls = () => {
                 ))}
             </select>
         </div>
-
-    )
-        ;
+    );
 };

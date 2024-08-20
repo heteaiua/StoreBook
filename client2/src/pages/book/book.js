@@ -8,7 +8,10 @@ import {useOrderdata} from "../../zustand/order.store";
 const BookDetails = () => {
     const {id} = useParams();
     const {fetchBookById, bookDetails} = useBooksData();
-    const {addBookToCart} = useOrderdata();
+    const {addBookToCart, cartItems} = useOrderdata(state => ({
+        addBookToCart: state.addBookToCart,
+        cartItems: state.cartItems
+    }));
     const navigate = useNavigate();
 
     const handleBackClick = () => {
@@ -18,6 +21,7 @@ const BookDetails = () => {
     const handleAddToCart = async () => {
         if (bookDetails) {
             try {
+                console.log(bookDetails, 'book Details')
                 await addBookToCart(bookDetails);
                 alert('Book has been added!');
             } catch (error) {
@@ -59,7 +63,9 @@ const BookDetails = () => {
                 </div>
 
 
-                <Button className="btn btn-secondary" onClick={handleAddToCart}>Add to Cart</Button>
+                <Button className="btn btn-secondary" onClick={handleAddToCart}
+                        disabled={bookDetails.stockQuantity <= 0}>Add to
+                    Cart</Button>
             </div>
         </div>
 
