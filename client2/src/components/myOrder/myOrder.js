@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
-import {useOrderdata} from "../../zustand/order.store";
-import OrdersTable from "../order-table/order-table";
+import {useOrderdata} from "../../zustand/orderStore";
+import OrdersTable from "../table/Table";
 import {LoadingErrorHandler} from "../loading-error-handler/loading-error-handler";
 
-const UserOrdersComponent = ({userId}) => {
+const MyOrder = ({userId}) => {
     const {userOrders = [], loading, error, getOrderByUserId} = useOrderdata(state => ({
         userOrders: state.userOrders,
         loading: state.loading,
@@ -29,4 +29,4 @@ const UserOrdersComponent = ({userId}) => {
     );
 };
 
-export default UserOrdersComponent;
+export default MyOrder;

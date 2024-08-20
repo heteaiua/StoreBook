@@ -1,5 +1,5 @@
 import React from 'react';
-import {useBooksData} from '../../zustand/book.store';
+import {useBooksData} from '../../zustand/bookStore';
 
 export const PaginationControls = () => {
     const {page, totalItems, limit, nextPage, prevPage, setItemsLimitPerPage} = useBooksData(state => ({

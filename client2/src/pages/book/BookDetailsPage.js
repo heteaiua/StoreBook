@@ -1,19 +1,24 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {useBooksData} from '../../zustand/book.store';
-import './bookDetails.css'
+import {useBooksData} from '../../zustand/bookStore';
+import './book-details.css'
 import {Button} from "react-bootstrap";
-import {useOrderdata} from "../../zustand/order.store";
+import {useOrderdata} from "../../zustand/orderStore";
 
-const BookDetails = () => {
+const BookDetailsPage = () => {
     const {id} = useParams();
-    const {fetchBookById, bookDetails} = useBooksData();
-    const {addBookToCart, cartItems} = useOrderdata(state => ({
-        addBookToCart: state.addBookToCart,
-        cartItems: state.cartItems
-    }));
     const navigate = useNavigate();
-
+    const [localError, setLocalError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const {fetchBookById, bookDetails, error, loading} = useBooksData();
+    const {addBookToCart} = useOrderdata(state => ({
+        addBookToCart: state.addBookToCart,
+    }));
+    useEffect(() => {
+        if (id) {
+            fetchBookById(id);
+        }
+    }, [id]);
     const handleBackClick = () => {
         navigate('/books');
     };
@@ -21,23 +26,15 @@ const BookDetails = () => {
     const handleAddToCart = async () => {
         if (bookDetails) {
             try {
-                console.log(bookDetails, 'book Details')
                 await addBookToCart(bookDetails);
-                alert('Book has been added!');
+                setSuccessMessage('Book added successfully');
             } catch (error) {
-                alert('Book add failed.');
+                setLocalError('Failed to add book' + error.message);
             }
         }
     };
 
-    useEffect(() => {
-        if (id) {
-            fetchBookById(id);
-        }
-    }, [id]);
-
     if (!bookDetails) return <div>Book not found or an error occurred</div>;
-
     return (
         <div className="background-book-details">
             <div className="book-details">
@@ -61,15 +58,14 @@ const BookDetails = () => {
                         <p>{bookDetails.description}.</p>
                     </div>
                 </div>
-
-
                 <Button className="btn btn-secondary" onClick={handleAddToCart}
-                        disabled={bookDetails.stockQuantity <= 0}>Add to
-                    Cart</Button>
+                        disabled={bookDetails.stockQuantity <= 0}>Add to Cart</Button>
+                {successMessage && <div className="alert alert-success">{successMessage}</div>}
+                {localError && <div className="alert alert-danger">{localError}</div>}
             </div>
         </div>
 
     );
 };
 
-export default BookDetails;
+export default BookDetailsPage;

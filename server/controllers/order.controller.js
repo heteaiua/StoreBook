@@ -6,7 +6,7 @@ const getAllOrders = async (req, res) => {
         if (orders.length === 0) {
             return res.status(204).json({message: "No orders found!", data: []});
         }
-        res.status(200).json({message: "Orders retrieved successfully", data: orders});
+        res.status(200).json({message: "OrdersPage retrieved successfully", data: orders});
 
     } catch (err) {
         res.status(500).json({message: "Error! Could not get orders!", error: err.message});

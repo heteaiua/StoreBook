@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {useBooksData} from "../../zustand/book.store";
+import {useBooksData} from "../../zustand/bookStore";
 import {Form} from "react-bootstrap";
 import {LoadingErrorHandler} from "../loading-error-handler/loading-error-handler";
 

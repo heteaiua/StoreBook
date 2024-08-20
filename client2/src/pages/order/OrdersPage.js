@@ -1,11 +1,11 @@
-import {useOrderdata} from "../../zustand/order.store";
+import {useOrderdata} from "../../zustand/orderStore";
 import {useEffect} from "react";
-import './cart.css'
-import OrdersTable from "../../components/order-table/order-table";
+import './orders.css'
+import OrdersTable from "../../components/table/Table";
 import {LoadingErrorHandler} from "../../components/loading-error-handler/loading-error-handler";
 
-export default function ShoppingCart() {
-    const {orders, loading, error, fetchOrders} = useOrderdata(state => ({
+export default function OrdersPage() {
+    const {orders = [], loading, error, fetchOrders} = useOrderdata(state => ({
         orders: state.orders,
         loading: state.loading,
         error: state.error,
