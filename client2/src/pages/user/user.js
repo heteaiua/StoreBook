@@ -52,9 +52,9 @@ const UserProfile = () => {
         setFormData(initializeFormData(user));
     };
     return (
-        <div className={""}>
+        <div className="order-page">
             <h1 className="welcome-message">{user.firstName}'s profile</h1>
-            <div className="user-profile-container">
+            <div className="data-container">
                 {editMode ? (
                     <div className="edit-profile">
                         <label>

@@ -1,5 +1,6 @@
 import {create} from "zustand";
 import {
+    addBookApi,
     getAllBookApi,
     getAllBookFilteredApi,
     getBookByIdApi,
@@ -9,9 +10,8 @@ import {
 
 const initialState = {
     loading: false,
-    error: false,
+    error: null,
     data: [],
-    errorData: null,
     filteredBooks: [],
     filters: {
         author: '',
@@ -32,12 +32,8 @@ const initialState = {
 
 export const useBooksData = create((set, get) => ({
     ...initialState,
-    setBooks: (books) => set({books}),
-    setLoading: (loading) => set({loading}),
-    setError: (error) => set({error}),
-    setPage: (page) => set({page}),
-    setItems: (totalItems) => set({totalItems}),
     setItemsLimitPerPage: (limit) => set({limit, page: 1}),
+
     setFilters: (filterType, value) => set(state => ({
         filters: {
             ...state.filters,
@@ -46,6 +42,7 @@ export const useBooksData = create((set, get) => ({
         page: 1
 
     })),
+
     resetFilters: () => {
         set(state => {
             const resetFilters = {
@@ -59,14 +56,13 @@ export const useBooksData = create((set, get) => ({
     },
 
     fetchBooks: async () => {
-        set({loading: true});
+        set({loading: true, error: null});
         try {
             const response = await getAllBookApi();
             const books = await response.data.data;
             set({data: books})
-
         } catch (error) {
-            set({error: true})
+            set({error: 'Failed to fetch books'})
         } finally {
             set({loading: false});
         }
@@ -74,8 +70,7 @@ export const useBooksData = create((set, get) => ({
 
     getFilteredBooks: async () => {
         const {page, limit, filters} = get();
-        set({loading: true});
-
+        set({loading: true, error: null});
         try {
             const queryParams = new URLSearchParams();
             queryParams.append("limit", limit);
@@ -97,8 +92,7 @@ export const useBooksData = create((set, get) => ({
             });
 
         } catch (error) {
-            console.error('Failed to fetch filtered books:', error);
-            set({error: true});
+            set({error: 'Failed to fetch filtered books:'});
         } finally {
             set({loading: false});
         }
@@ -109,16 +103,17 @@ export const useBooksData = create((set, get) => ({
         const {selectOptions, isLoading} = state;
         if (selectOptions) return;
         if (isLoading) return;
-        set({isLoading: true});
+        set({isLoading: true, error: null});
         try {
             const response = await getUniqueFieldsApi();
             set({selectOptions: response.data.data});
         } catch (error) {
-            console.error('Failed to fetch options:', error);
+            set({error: 'Failed to fetch options'});
         } finally {
             set({isLoading: false});
         }
     },
+
     nextPage: () => {
         set(state => {
             if (state.page < Math.ceil(state.totalItems / state.limit) || 1) {
@@ -127,6 +122,7 @@ export const useBooksData = create((set, get) => ({
             return {};
         });
     },
+
     prevPage: () => {
         set(state => {
             if (state.page > 1) {
@@ -135,40 +131,37 @@ export const useBooksData = create((set, get) => ({
             return {};
         });
     },
+
     countSelectedFilters: () => {
         const filters = get().filters;
         return Object.values(filters).filter(value => value !== '').length;
     },
+
     fetchBookById: async (id) => {
         const {bookCache} = get();
-
         if (!bookCache[id]) {
-            set({loading: true});
+            set({loading: true, error: null});
             try {
                 const response = await getBookByIdApi(id);
                 bookCache[id] = response.data.data;
-
                 set(state => ({
                     bookCache: bookCache,
                 }));
                 localStorage.setItem('bookCache', JSON.stringify(bookCache));
-
             } catch (error) {
-                set({error: true});
+                set({error: 'Failed to fetch book details'});
             } finally {
                 set({loading: false});
             }
         }
-
         set({bookDetails: bookCache[id]});
     },
-    
+
     updateBook: async (id, updatedData) => {
-        set({loading: true});
+        set({loading: true, error: null});
         try {
             const response = await updateBookApi(id, updatedData);
             const updatedBook = response.data.data;
-
             set(state => {
                 const updatedBookCache = {...state.bookCache, [id]: updatedBook};
                 return {
@@ -177,10 +170,25 @@ export const useBooksData = create((set, get) => ({
                 };
             });
         } catch (error) {
-            console.error("Error updating book:", error);
-            set({error: true});
+            set({error: "Error updating book:"});
         } finally {
             set({loading: false});
         }
     },
+
+    addBook: async (bookData) => {
+        set({loading: true, error: null});
+        try {
+            const response = await addBookApi(bookData);
+            const newBook = response.data.data;
+            set(state => ({
+                data: [...state.data, newBook],
+                filteredBooks: [...state.filteredBooks, newBook]
+            }))
+        } catch (error) {
+            set({error: "Error adding book"});
+        } finally {
+            set({loading: false});
+        }
+    }
 }));

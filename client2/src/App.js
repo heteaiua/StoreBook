@@ -15,7 +15,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 function App() {
     return (
         <Router>
-
             <div className="main-layout">
                 <CustomNavbar/>
                 <div className="body-layout">

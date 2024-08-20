@@ -1,4 +1,4 @@
-.user-profile-container {
+.data-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
@@ -8,6 +8,7 @@
     border-radius: 8px;
     background-color: #f4f4f4;
     width: 100%;
+    margin: 20px 0px;
 }
 
 .edit-profile label {

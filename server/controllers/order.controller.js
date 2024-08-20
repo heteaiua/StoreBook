@@ -1,5 +1,5 @@
 const orderService = require("../services/order.service");
-
+const bookService = require("../services/book.service");
 const getAllOrders = async (req, res) => {
     try {
         const orders = await orderService.getAll();
@@ -12,7 +12,6 @@ const getAllOrders = async (req, res) => {
         res.status(500).json({message: "Error! Could not get orders!", error: err.message});
     }
 }
-
 const getOrderById = async (req, res) => {
     const orderId = req.params.orderId;
     try {
@@ -41,8 +40,6 @@ const getOrderByUserId = async (req, res) => {
         res.status(500).json({message: "Error! Could not get order by User id!", error: err.message});
     }
 };
-
-
 const addOrder = async (req, res) => {
     const {items, date, userId} = req.body;
     if (!Array.isArray(items) || items.length === 0) {
@@ -52,15 +49,41 @@ const addOrder = async (req, res) => {
     if (!date) {
         return res.status(400).json({message: 'Date is required.'});
     }
-
     try {
+        const bookUpdates = [];
+        const insufficientStockItems = [];
+
+        for (const item of items) {
+            const book = await bookService.getById(item.bookId);
+
+            if (book && item.quantity > book.stockQuantity) {
+                insufficientStockItems.push(item.bookId);
+            } else if (book) {
+                book.stockQuantity -= item.quantity;
+                bookUpdates.push({id: book._id, stockQuantity: book.stockQuantity});
+            }
+        }
+
+        if (insufficientStockItems.length > 0) {
+            return res.status(400).json({
+                message: `Insufficient stock for books: ${insufficientStockItems.join(', ')}`
+            });
+        }
+
+        await Promise.all(bookUpdates.map(update =>
+            bookService.update(update.id, {stockQuantity: update.stockQuantity})
+        ));
+
         const createdOrder = await orderService.add({
             items,
             date,
             userId
         });
-        res.status(201).json({message: 'New order added!', data: createdOrder});
+
+        res.status(201).json({message: 'New order added and stock updated!', data: createdOrder});
+
     } catch (err) {
+        console.error('Error processing order:', err);
         res.status(500).json({message: 'Order creation failed!', error: err.message});
     }
 };

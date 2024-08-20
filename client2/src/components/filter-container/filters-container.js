@@ -17,9 +17,7 @@ const filterOptions = [
     {type: 'price'},
     {type: 'sortOrder'}
 ];
-
 export const FiltersContainer = () => {
-
     const {
         selectOptions = [],
         resetFilters,
@@ -37,7 +35,6 @@ export const FiltersContainer = () => {
         fetchOptionList();
     }, []);
 
-
     return (
         <div className="filters-container">
             {filterOptions.map(({type}) => (
@@ -52,7 +49,6 @@ export const FiltersContainer = () => {
             <div className="filters-count">
                 {countSelectedFilters()} filter{countSelectedFilters() === 1 ? '' : 's'} selected
             </div>
-
             <button className='btn-reset-filters' onClick={resetFilters}>
                 <i className="bi bi-arrow-clockwise"></i>
             </button>

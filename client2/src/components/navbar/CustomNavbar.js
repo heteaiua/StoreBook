@@ -11,6 +11,7 @@ import {useAuth} from "../../zustand/user.store";
 function CustomNavbar() {
     const navigate = useNavigate()
     const {isAuthenticated, logout, checkAuth, user, getUserId, fetchUser} = useAuth();
+
     useEffect(() => {
         checkAuth();
         if (isAuthenticated) {

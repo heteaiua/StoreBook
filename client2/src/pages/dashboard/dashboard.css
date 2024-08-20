@@ -1,4 +1,4 @@
-.welcome-message{
+.welcome-message {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -22,8 +22,8 @@
     cursor: pointer;
     border-radius: 8px;
     transition: background-color 0.3s ease;
-    width:60px;
-    height:40px;
+    width: 60px;
+    height: 40px;
     align-items: center;
     display: flex;
     justify-content: center;
@@ -40,9 +40,6 @@
     opacity: 50%;
 }
 
-.dashboard-style {
-    /*background-image: url('https://static.vecteezy.com/system/resources/previews/022/454/671/large_2x/3d-rendering-of-a-little-robot-reading-a-book-in-a-dark-room-generative-ai-free-photo.jpg');*/
-    /*background-size: cover;*/
-    /*background-position: center;*/
-    /*color: rgba(255, 255, 255, 0.3);*/
+.btn-add-book {
+
 }

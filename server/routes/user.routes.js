@@ -17,7 +17,6 @@ router.get("/filter", filteredUsers);
 router.get("/", getAllUsers);
 router.get("/auth/current", validateToken, currentUser);
 router.get("/:userId", getUserById);
-
 router.post("/", addUser);
 router.post("/signup", signup);
 router.post("/login", login);

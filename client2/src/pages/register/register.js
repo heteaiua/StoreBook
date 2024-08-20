@@ -5,6 +5,15 @@ import {Form} from 'react-bootstrap';
 import {useRegisterStore} from '../../zustand/register.store';
 import {registerAPI} from '../../endpoints/userEndpoints';
 
+const formFields = [
+    {id: 'firstName', placeholder: 'First Name'},
+    {id: 'lastName', placeholder: 'Last Name'},
+    {id: 'email', placeholder: 'Email', type: 'email'},
+    {id: 'age', placeholder: 'Age', type: 'number'},
+    {id: 'address', placeholder: 'Address'},
+    {id: 'phoneNumber', placeholder: 'Phone Number'}
+];
+
 const RegisterForm = () => {
     const {formData, setField, resetForm} = useRegisterStore(state => ({
         formData: state.formData,
@@ -37,7 +46,6 @@ const RegisterForm = () => {
         if (formData.password !== formData.rePassword) {
             newErrors.rePassword = "Passwords do not match";
         }
-
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -73,14 +81,7 @@ const RegisterForm = () => {
                     </h1>
 
                     <Form className="form-wrapper-register" onSubmit={handleSubmit}>
-                        {[
-                            {id: 'firstName', placeholder: 'First Name'},
-                            {id: 'lastName', placeholder: 'Last Name'},
-                            {id: 'email', placeholder: 'Email'},
-                            {id: 'age', placeholder: 'Age', type: 'number'},
-                            {id: 'address', placeholder: 'Address'},
-                            {id: 'phoneNumber', placeholder: 'Phone Number'}
-                        ].map((field, index) => (
+                        {formFields.map((field, index) => (
                             <div className="register-form-group row" key={index}>
                                 <label className="col-sm-2 col-form-label">{field.placeholder}</label>
                                 <div className="col-sm-10">
