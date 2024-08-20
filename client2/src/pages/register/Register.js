@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './register.css';
 import {Link, useNavigate} from 'react-router-dom';
 import {Form} from 'react-bootstrap';
-import {useRegisterStore} from '../../zustand/register.store';
+import {useRegisterStore} from '../../zustand/registerStore';
 import {registerAPI} from '../../endpoints/userEndpoints';
 
 const formFields = [

@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
-import BookCard from "./bookCard";
-import {useBooksData} from "../../zustand/book.store";
-import {PaginationControls} from "../nav-button/nav-butons";
+import BookCard from "./BookCard";
+import {useBooksData} from "../../zustand/bookStore";
+import {PaginationControls} from "../pagination/Pagination";
 import './book-grid.css';
 import {LoadingErrorHandler} from "../loading-error-handler/loading-error-handler";
-import {AddBookForm} from "./addBookForm";
-import {Modal} from "../modal/modal";
+import {AddBookForm} from "./AddBookForm";
+import {Modal} from "../modal/Modal";
 
 export const BookCardsSection = () => {
     const [isGridView, setIsGridView] = useState(true);

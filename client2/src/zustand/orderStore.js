@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 import {addBookToCartApi, getAllOrderApi, getOrderByUserIdApi} from '../endpoints/orderEndpoints';
-import {useBooksData} from "./book.store";
+import {useBooksData} from "./bookStore";
 
 export const useOrderdata = create((set, get) => ({
     loading: false,
@@ -21,37 +21,49 @@ export const useOrderdata = create((set, get) => ({
             set({loading: false});
         }
     },
+    addBookToCart: async (book) => {
+        set({loading: true, error: null});
+        const {cartItems, isStockAvailable} = get();
+        const existingBookIndex = cartItems.findIndex(item => item.bookId === book._id);
 
-    addBookToCart: (book) => set((state) => {
-        const existingBookIndex = state.cartItems.findIndex(item => item.bookId === book._id);
-        const isAvailable = book.stockQuantity > 0
+        if (!useBooksData.getState().bookCache[book._id]) {
+            await useBooksData.getState().fetchBookById(book._id);
+        }
+
+        const updatedBookCache = useBooksData.getState().bookCache[book._id];
+        const isAvailable = updatedBookCache && updatedBookCache.stockQuantity > 0;
 
         if (existingBookIndex !== -1) {
-            const updatedCartItems = [...state.cartItems];
-            console.log(updatedCartItems);
-            updatedCartItems[existingBookIndex].quantity += 1;
-            return {
+            const updatedCartItems = [...cartItems];
+            const item = updatedCartItems[existingBookIndex];
+            if (updatedBookCache) {
+                updatedCartItems[existingBookIndex].quantity = Math.min(item.quantity + 1, updatedBookCache.stockQuantity);
+            }
+            set({
                 cartItems: updatedCartItems,
-                isStockAvailable: isAvailable
-            };
+                isStockAvailable: isAvailable,
+                error: null,
+                loading: false
+            });
         } else {
-
-            return {
+            set({
                 cartItems: [
-                    ...state.cartItems,
+                    ...cartItems,
                     {
                         bookId: book._id,
                         quantity: 1,
                         price: book.price,
                         name: book.name,
-                        stockQuantity: book.stockQuantity,
+                        stockQuantity: updatedBookCache ? updatedBookCache.stockQuantity : book.stockQuantity,
                     }
                 ],
                 isStockAvailable: isAvailable,
-
-            };
+                error: null,
+                loading: false
+            });
         }
-    }),
+    },
+
     checkStock: () => {
         const {cartItems} = get();
         const bookCache = useBooksData.getState().bookCache;
@@ -64,7 +76,6 @@ export const useOrderdata = create((set, get) => ({
                 break;
             }
         }
-
         set({isStockAvailable});
     },
 
@@ -86,8 +97,7 @@ export const useOrderdata = create((set, get) => ({
                 set({error: response.data.message || 'Error sending order.', loading: false});
                 return;
             }
-            set({cartItems: []});
-            set({isStockAvailable: true});
+            set({cartItems: [], isStockAvailable: true});
             return response.data;
 
         } catch (err) {
@@ -98,8 +108,7 @@ export const useOrderdata = create((set, get) => ({
         }
     },
 
-
-    updateQuantity: (bookId, operation) => set((state) => {
+    updateQuantity: (bookId, operation) => set(state => {
         const existingBookIndex = state.cartItems.findIndex(item => item.bookId === bookId);
 
         if (existingBookIndex !== -1) {
@@ -113,14 +122,16 @@ export const useOrderdata = create((set, get) => ({
                     const newQuantity = item.quantity + 1;
                     updatedCartItems[existingBookIndex].quantity = Math.min(newQuantity, book.stockQuantity);
                 } else if (operation === 'decrement') {
-                    updatedCartItems[existingBookIndex].quantity = Math.max(item.quantity - 1, 1);
+                    updatedCartItems[existingBookIndex].quantity = Math.max(item.quantity - 1, 0);
+                }
+                if (updatedCartItems[existingBookIndex].quantity === 0) {
+                    updatedCartItems.splice(existingBookIndex, 1);
                 }
             }
             return {cartItems: updatedCartItems};
         }
         return {cartItems: state.cartItems};
     }),
-
     getOrderByUserId: async (userId) => {
         set({loading: true, error: null});
         try {

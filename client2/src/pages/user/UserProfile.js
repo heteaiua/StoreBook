@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import './user.css'
-import {useAuth} from "../../zustand/user.store";
-import UserOrdersComponent from "../../components/user-order-container/user-order";
+import './user-profile.css'
+import {useAuth} from "../../zustand/userStore";
+import MyOrder from "../../components/myOrder/myOrder";
 
 const initializeFormData = (user) => ({
     firstName: user.firstName || '',
@@ -117,7 +117,7 @@ const UserProfile = () => {
                 )}
             </div>
             <div className="user-book-section">
-                {user && <UserOrdersComponent userId={user._id}/>}
+                {user && <MyOrder userId={user._id}/>}
             </div>
         </div>
 

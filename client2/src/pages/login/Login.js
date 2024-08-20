@@ -4,7 +4,7 @@ import {Form} from 'react-bootstrap';
 import {loginAPI} from '../../endpoints/userEndpoints';
 import {useNavigate} from 'react-router-dom';
 import {FaEye, FaEyeSlash} from 'react-icons/fa';
-import {useAuth} from "../../zustand/user.store"
+import {useAuth} from "../../zustand/userStore"
 
 function LoginForm() {
     const [email, setEmail] = useState('');

@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
-import Filter from "./filters";
-import {useBooksData} from "../../zustand/book.store";
+import Filter from "./Filter";
+import {useBooksData} from "../../zustand/bookStore";
 
 const typeTranslator = {
     author: "uniqueAuthors",

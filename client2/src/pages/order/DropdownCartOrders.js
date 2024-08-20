@@ -1,11 +1,11 @@
 import {useEffect, useRef, useState} from "react";
-import './dropdown-card.css'
-import {useOrderdata} from "../../zustand/order.store";
+import './dropdown-cart-orders.css'
+import {useOrderdata} from "../../zustand/orderStore";
 import {useNavigate} from "react-router-dom";
 import {LoadingErrorHandler} from "../../components/loading-error-handler/loading-error-handler";
 import {calculateTotal} from "../../utils/utils";
 
-export default function DropdownCart({userId}) {
+export default function DropdownCartOrders({userId}) {
     const {
         cartItems,
         isStockAvailable,
@@ -46,7 +46,7 @@ export default function DropdownCart({userId}) {
             await sendOrder(userId);
             setSuccessMessage('Order has been sent!');
             setTimeout(() => setSuccessMessage(''), 1000);
-            // navigate('/profile');
+            navigate('/profile');
         } catch (error) {
             setLocalError('Order failed. Please try again.' + error.message);
             setTimeout(() => setLocalError(''), 1000);

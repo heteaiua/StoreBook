@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {Button} from "react-bootstrap";
 import './book-card.css'
 import {Link} from "react-router-dom";
-import {useOrderdata} from "../../zustand/order.store";
+import {useOrderdata} from "../../zustand/orderStore";
 import {LoadingErrorHandler} from "../loading-error-handler/loading-error-handler";
 
 const BookCard = ({propBook}) => {
@@ -29,15 +29,15 @@ const BookCard = ({propBook}) => {
     }));
     const handleAddToCart = async () => {
         try {
-            console.log(book);
             await addBookToCart(book);
-            setSuccessMessage('Book added to cart!');
+            setSuccessMessage('Book added to order!');
+            setTimeout(() => setSuccessMessage(''), 2000);
             setLocalError('');
-            setTimeout(() => setSuccessMessage(''), 1000);
+
         } catch (err) {
-            setLocalError('Failed to add book to cart. Please try again.' + error.message);
+            setLocalError('Failed to add book to order. Please try again.' + error.message);
             setSuccessMessage('');
-            setTimeout(() => setSuccessMessage(''), 1000);
+            setTimeout(() => setSuccessMessage(''), 2000);
         }
     };
     return (

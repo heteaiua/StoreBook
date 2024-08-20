@@ -4,9 +4,9 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import {Button, NavItem} from 'react-bootstrap';
 import './CustomNavbar.css'
-import DropdownCart from "../../pages/cart/dropdown-cart";
+import DropdownCartOrders from "../../pages/order/DropdownCartOrders";
 import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../zustand/user.store";
+import {useAuth} from "../../zustand/userStore";
 
 function CustomNavbar() {
     const navigate = useNavigate()
@@ -60,7 +60,7 @@ function CustomNavbar() {
                         ) : (
                             <Button onClick={handleLogout}>LOG OUT</Button>
                         )}
-                        <DropdownCart userId={userId}/>
+                        <DropdownCartOrders userId={userId}/>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

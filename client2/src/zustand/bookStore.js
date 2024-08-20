@@ -143,9 +143,11 @@ export const useBooksData = create((set, get) => ({
             set({loading: true, error: null});
             try {
                 const response = await getBookByIdApi(id);
-                bookCache[id] = response.data.data;
+                const bookData = response.data.data;
+                const updatedBookCache = {...bookCache, [id]: bookData};
                 set(state => ({
-                    bookCache: bookCache,
+                    bookCache: updatedBookCache,
+                    bookDetails: bookData,
                 }));
                 localStorage.setItem('bookCache', JSON.stringify(bookCache));
             } catch (error) {
@@ -154,7 +156,6 @@ export const useBooksData = create((set, get) => ({
                 set({loading: false});
             }
         }
-        set({bookDetails: bookCache[id]});
     },
 
     updateBook: async (id, updatedData) => {
@@ -162,6 +163,7 @@ export const useBooksData = create((set, get) => ({
         try {
             const response = await updateBookApi(id, updatedData);
             const updatedBook = response.data.data;
+
             set(state => {
                 const updatedBookCache = {...state.bookCache, [id]: updatedBook};
                 return {
