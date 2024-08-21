@@ -5,6 +5,7 @@ import {loginAPI} from '../../endpoints/userEndpoints';
 import {useNavigate} from 'react-router-dom';
 import {FaEye, FaEyeSlash} from 'react-icons/fa';
 import {useAuth} from "../../zustand/userStore"
+import {setAccessToken} from "../../utils/authHelpers";
 
 function LoginForm() {
     const [email, setEmail] = useState('');
@@ -37,7 +38,7 @@ function LoginForm() {
         }
         try {
             const response = await loginAPI(email, password);
-            localStorage.setItem('accessToken', response.data.accessToken);
+            setAccessToken(response.data.accessToken);
             login();
             navigate('/profile');
         } catch (error) {

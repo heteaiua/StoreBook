@@ -24,7 +24,6 @@ function CustomNavbar() {
         navigate('/login');
     };
 
-    const userId = getUserId();
 
     return (
         <Navbar className="nav-style">
@@ -60,7 +59,7 @@ function CustomNavbar() {
                         ) : (
                             <Button onClick={handleLogout}>LOG OUT</Button>
                         )}
-                        <DropdownCartOrders userId={userId}/>
+                        <DropdownCartOrders/>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

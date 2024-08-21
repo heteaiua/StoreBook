@@ -1,6 +1,7 @@
 const userService = require("../services/user.service");
 const UserModel = require("../models/user");
 const mongoose = require('mongoose');
+
 const getAllUsers = async (req, res) => {
     try {
         const users = await userService.getAll();
@@ -34,7 +35,7 @@ const getUserById = async (req, res) => {
 };
 
 const addUser = async (req, res) => {
-    const {firstName, lastName, email, password, age, address, phoneNumber} = req.body;
+    const {firstName, lastName, email, password, age, address, phoneNumber, role} = req.body;
     try {
         const existingUsers = await userService.getAll();
         const usedEmail = existingUsers.find((user) => user.email === email);
@@ -50,7 +51,8 @@ const addUser = async (req, res) => {
             password,
             age,
             address,
-            phoneNumber
+            phoneNumber,
+            role
         });
         res.status(201).json({message: "New user added!", data: createdUser});
     } catch (err) {

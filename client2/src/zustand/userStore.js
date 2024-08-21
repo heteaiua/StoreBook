@@ -1,17 +1,18 @@
 import {create} from 'zustand';
 import {getCurrentUser, updateUserAPI} from "../endpoints/userEndpoints";
+import {getAccessToken, removeAccessToken} from "../utils/authHelpers";
 
 export const useAuth = create((set, get) => ({
     user: {},
     error: null,
     editMode: false,
-    isAuthenticated: !!localStorage.getItem('accessToken'),
+    isAuthenticated: !!getAccessToken(),
     login: () => set({isAuthenticated: true}),
     logout: () => {
-        localStorage.removeItem('accessToken');
+        removeAccessToken();
         set({isAuthenticated: false});
     },
-    checkAuth: () => set({isAuthenticated: !!localStorage.getItem('accessToken')}),
+    checkAuth: () => set({isAuthenticated: !!getAccessToken()}),
     fetchUser: async () => {
         try {
             const userData = await getCurrentUser();

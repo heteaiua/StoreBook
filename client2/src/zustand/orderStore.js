@@ -21,7 +21,7 @@ export const useOrderdata = create((set, get) => ({
             set({loading: false});
         }
     },
-    addBookToCart: async (book) => {
+    addBookToCart: async (book, quantity) => {
         set({loading: true, error: null});
         const {cartItems, isStockAvailable} = get();
         const existingBookIndex = cartItems.findIndex(item => item.bookId === book._id);
@@ -37,7 +37,7 @@ export const useOrderdata = create((set, get) => ({
             const updatedCartItems = [...cartItems];
             const item = updatedCartItems[existingBookIndex];
             if (updatedBookCache) {
-                updatedCartItems[existingBookIndex].quantity = Math.min(item.quantity + 1, updatedBookCache.stockQuantity);
+                updatedCartItems[existingBookIndex].quantity = Math.min(item.quantity + quantity, updatedBookCache.stockQuantity)
             }
             set({
                 cartItems: updatedCartItems,
@@ -51,7 +51,7 @@ export const useOrderdata = create((set, get) => ({
                     ...cartItems,
                     {
                         bookId: book._id,
-                        quantity: 1,
+                        quantity: Math.min(quantity, updatedBookCache ? updatedBookCache.stockQuantity : book.stockQuantity),
                         price: book.price,
                         name: book.name,
                         stockQuantity: updatedBookCache ? updatedBookCache.stockQuantity : book.stockQuantity,
@@ -79,7 +79,7 @@ export const useOrderdata = create((set, get) => ({
         set({isStockAvailable});
     },
 
-    sendOrder: async (userId) => {
+    sendOrder: async () => {
         set({loading: true, error: null});
         const {cartItems, isStockAvailable} = get();
         if (!isStockAvailable) {
@@ -90,7 +90,6 @@ export const useOrderdata = create((set, get) => ({
             const response = await addBookToCartApi({
                 items: cartItems,
                 date: new Date().toISOString(),
-                userId
             });
 
             if (response.status !== 201) {

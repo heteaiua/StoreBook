@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     age: {type: Number, required: true},
     address: {type: String, required: true},
     phoneNumber: {type: String, required: true},
+    role: {type: String, enum: ['admin', 'user'], default: 'user'}
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);

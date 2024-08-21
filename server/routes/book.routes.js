@@ -9,12 +9,14 @@ const {
     getUniqueFields,
     deleteAllBooks
 } = require("../controllers/book.controller");
+const validateToken = require("../auth/middleware/validateTokenHandler");
+const checkRole = require("../auth/middleware/checkRole");
 
 const router = express.Router();
-router.get("/uniqueFields",getUniqueFields);
+router.get("/uniqueFields", getUniqueFields);
 router.get("/filter", filteredBooks);
 router.get("/", getAllBooks);
-router.post("/", addBook);
+router.post("/", validateToken, checkRole('admin'), addBook);
 router.get("/:bookId", getBookById);
 router.delete("/:bookId", deleteBook);
 router.delete("/", deleteAllBooks);

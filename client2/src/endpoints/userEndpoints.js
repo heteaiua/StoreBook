@@ -1,11 +1,12 @@
 import axios from "axios";
+import {getAccessToken} from "../utils/authHelpers";
 
 const userURL = process.env.REACT_APP_USER_URL;
 export const registerAPI = (formData) => axios.post(`${userURL}/signup`, formData);
 export const loginAPI = (email, password) => axios.post(`${userURL}/login`, {email, password});
 export const getCurrentUser = async () => {
     try {
-        const token = localStorage.getItem('accessToken');
+        const token = getAccessToken();
         if (!token) {
             return {user: null};
         }
@@ -23,7 +24,7 @@ export const getCurrentUser = async () => {
 };
 export const updateUserAPI = async (userId, updates) => {
     try {
-        const token = localStorage.getItem('accessToken');
+        const token = getAccessToken();
         const response = await axios.patch(`${userURL}/${userId}`, updates, {
             headers: {
                 Authorization: `Bearer ${token}`
