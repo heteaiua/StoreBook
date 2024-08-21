@@ -35,12 +35,18 @@ export default function DropdownCartOrders({userId}) {
     };
 
     const handleSendOrder = async () => {
+        checkStock();
+        const {isStockAvailable} = useOrderdata.getState();
         setLocalError('');
         setSuccessMessage('');
         try {
             if (!userId) {
                 setLocalError('User ID is required to place an order.');
                 navigate('/login');
+                return;
+            }
+            if (!isStockAvailable) {
+                setLocalError('One or more items in the cart are out of stock.');
                 return;
             }
             await sendOrder(userId);
@@ -108,7 +114,6 @@ export default function DropdownCartOrders({userId}) {
                     )}
                     <div>
                         <strong>Total Price:</strong> {calculateTotal(cartItems)} RON
-
                     </div>
                     {cartItems.length > 0 && (
                         <button
@@ -122,7 +127,6 @@ export default function DropdownCartOrders({userId}) {
                     {localError && <div className="alert alert-danger">{localError}</div>}
                     {successMessage && <div className="alert alert-success">{successMessage}</div>}
                 </div>
-
             </div>
         </LoadingErrorHandler>
     );

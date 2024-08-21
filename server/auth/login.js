@@ -34,7 +34,7 @@ const login = async (req, res) => {
                     },
                 },
                 process.env.ACCESS_TOKEN_SECRET,
-                {expiresIn: '1h'}
+                {expiresIn: '4h'}
             );
             return res.status(200).json({accessToken: accessToken, user: user});
         } else {

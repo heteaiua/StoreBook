@@ -21,7 +21,7 @@ const MyOrder = ({userId}) => {
         <LoadingErrorHandler loading={loading} error={error}>
             <h1 className="welcome-message">Orders</h1>
             {userOrders.length === 0 ? (
-                <p>No orders found.</p>
+                <p>User has no orders</p>
             ) : (
                 <OrdersTable orders={userOrders}/>
             )}

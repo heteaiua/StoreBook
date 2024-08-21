@@ -17,7 +17,7 @@ function CustomNavbar() {
         if (isAuthenticated) {
             fetchUser();
         }
-    }, [isAuthenticated, checkAuth]);
+    }, [isAuthenticated]);
 
     const handleLogout = () => {
         logout();

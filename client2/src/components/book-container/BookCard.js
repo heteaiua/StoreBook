@@ -50,7 +50,7 @@ const BookCard = ({propBook}) => {
                         <div className="book-year">{year}</div>
                         <h4 className="book-genre">{genre}</h4>
                         <h4 className="book-price">{price} RON</h4>
-                        <h4 className="book-stock">{stockQuantity}</h4>
+                        <h4 className="book-stock">Stock:{stockQuantity}</h4>
                     </div>
                     {imageURL && < img src={imageURL} alt={"img"} className="image-container"/>}
                 </div>
