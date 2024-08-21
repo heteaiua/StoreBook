@@ -10,7 +10,7 @@ import {Modal} from "../modal/Modal";
 export const BookCardsSection = () => {
     const [isGridView, setIsGridView] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const [isAdmin, setIsAdmin] = useState(false);
     const {
         filteredBooks,
         loading,
@@ -23,7 +23,10 @@ export const BookCardsSection = () => {
         limit: state.limit,
         filters: state.filters,
     }));
-
+    const userRole = localStorage.getItem('userRole');
+    useEffect(() => {
+        setIsAdmin(userRole === 'admin');
+    }, [userRole]);
     const handleViewToggle = () => {
         setIsGridView(prevState => !prevState);
     };
@@ -50,7 +53,10 @@ export const BookCardsSection = () => {
                     <button id="btn2" onClick={handleViewToggle} className="toggle-button" disabled={isGridView}>
                         Grid
                     </button>
-                    <button id="btn3" onClick={handleOpenModal} className="btn btn-primary">Add</button>
+                    {isAdmin && (
+                        <button id="btn3" onClick={handleOpenModal} className="btn btn-primary">Add</button>
+
+                    )}
                 </div>
                 <div className={isGridView ? "book-grid" : "book-list"}>
                     {filteredBooks && filteredBooks.length > 0 ? (
