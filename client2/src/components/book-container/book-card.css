@@ -34,7 +34,8 @@
 .book-grid .book-author,
 .book-grid .book-year,
 .book-grid .book-genre,
-.book-grid .book-price {
+.book-grid .book-price,
+.book-grid .book-stock {
     font-size: 1rem;
     margin: 4px 0;
     color: #666;
@@ -75,7 +76,8 @@
 .book-list .book-author,
 .book-list .book-year,
 .book-list .book-genre,
-.book-list .book-price {
+.book-list .book-price,
+.book-list .book-stock {
     padding: 0 16px 0 16px;
     font-size: 0.875rem;
     margin: 4px 0;
@@ -83,10 +85,11 @@
     white-space: nowrap;
     align-content: center;
 }
-.book-list .book-price{
+
+.book-list .book-price {
     display: flex;
     justify-content: flex-end;
-    width:100%;
+    width: 100%;
     align-content: center;
     align-items: center;
 }
@@ -124,11 +127,11 @@
 
 .book-grid .book-layout {
     display: flex;
-    gap:20px;
+    gap: 20px;
     padding-block: 8px;
 }
 
-.book-list .information-layout{
+.book-list .information-layout {
     display: flex;
 }
 
@@ -149,12 +152,13 @@
 .book-grid .book-layout {
     display: flex;
 
-    gap:20px;
+    gap: 20px;
     padding-block: 8px;
 }
+
 .book-list .book-layout {
     display: flex;
-    gap:20px;
+    gap: 20px;
     padding-block: 8px;
 }
 

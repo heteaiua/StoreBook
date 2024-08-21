@@ -41,7 +41,13 @@ const getOrderByUserId = async (req, res) => {
     }
 };
 const addOrder = async (req, res) => {
-    const {items, date, userId} = req.body;
+    const {items, date} = req.body;
+    const userId = req.user.id;
+
+    if (!userId) {
+        return res.status(400).json({message: "UserId is required"});
+    }
+
     if (!Array.isArray(items) || items.length === 0) {
         return res.status(400).json({message: 'Order must contain at least one item.'});
     }
