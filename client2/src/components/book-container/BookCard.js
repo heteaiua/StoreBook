@@ -29,7 +29,7 @@ const BookCard = ({propBook}) => {
     }));
     const handleAddToCart = async () => {
         try {
-            await addBookToCart(book);
+            await addBookToCart(book, 1);
             setSuccessMessage('Book added to order!');
             setTimeout(() => setSuccessMessage(''), 2000);
             setLocalError('');

@@ -13,14 +13,10 @@ const login = async (req, res) => {
     }
     try {
         const user = await UserModel.findOne({email});
-
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
-        if (!isPasswordValid) {
-            return res.status(401).json({message: 'Invalid email or password'});
-        }
 
-        if (user && (await bcrypt.compare(password, user.password))) {
+        if (user && isPasswordValid) {
             const accessToken = jwt.sign({
                     user: {
                         id: user._id,
@@ -30,7 +26,7 @@ const login = async (req, res) => {
                         age: user.age,
                         address: user.address,
                         phoneNumber: user.phoneNumber,
-
+                        role: user.role,
                     },
                 },
                 process.env.ACCESS_TOKEN_SECRET,

@@ -12,6 +12,7 @@ const BookDetailsPage = () => {
     const [localError, setLocalError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const {fetchBookById, bookDetails, error, loading} = useBooksData();
+    const [quantity, setQuantity] = useState(1);
     const {addBookToCart, isStockAvailable} = useOrderdata(state => ({
         addBookToCart: state.addBookToCart,
     }));
@@ -27,13 +28,25 @@ const BookDetailsPage = () => {
     const handleAddToCart = async () => {
         if (bookDetails) {
             try {
-                await addBookToCart(bookDetails);
+                await addBookToCart(bookDetails, quantity);
                 setSuccessMessage('Book added successfully');
             } catch (error) {
                 setLocalError('Failed to add book' + error.message);
             }
         }
     };
+
+    const handleQuantityChange = (event) => {
+        const value = parseInt(event.target.value, 10);
+
+        if (!isNaN(value) && value > 0 && value <= (bookDetails?.stockQuantity || 0)) {
+            setQuantity(value);
+        } else if (value > (bookDetails?.stockQuantity || 0)) {
+            setQuantity(bookDetails.stockQuantity);
+        } else {
+            setQuantity(1);
+        }
+    }
 
     if (!bookDetails) return <div>Book not found or an error occurred</div>;
     return (
@@ -59,6 +72,18 @@ const BookDetailsPage = () => {
                         <div className="book-description">
                             <p>{bookDetails.description}.</p>
                         </div>
+                    </div>
+                    <div className="quantity-container">
+                        <label className="quantity">Quantity:</label>
+                        <input
+                            type="number"
+                            id="quantity"
+                            value={quantity}
+                            min="1"
+                            max={bookDetails.stockQuantity}
+                            onChange={handleQuantityChange}
+                            className="quantity-input"
+                        />
                     </div>
                     <Button className="btn btn-secondary" onClick={handleAddToCart}
                             disabled={bookDetails.stockQuantity <= 0}>Add to Cart</Button>

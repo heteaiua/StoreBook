@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {LoadingErrorHandler} from "../../components/loading-error-handler/loading-error-handler";
 import {calculateTotal} from "../../utils/utils";
 
-export default function DropdownCartOrders({userId}) {
+export default function DropdownCartOrders() {
     const {
         cartItems,
         isStockAvailable,
@@ -40,16 +40,11 @@ export default function DropdownCartOrders({userId}) {
         setLocalError('');
         setSuccessMessage('');
         try {
-            if (!userId) {
-                setLocalError('User ID is required to place an order.');
-                navigate('/login');
-                return;
-            }
             if (!isStockAvailable) {
                 setLocalError('One or more items in the cart are out of stock.');
                 return;
             }
-            await sendOrder(userId);
+            await sendOrder();
             setSuccessMessage('Order has been sent!');
             setTimeout(() => setSuccessMessage(''), 1000);
             navigate('/profile');

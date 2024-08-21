@@ -10,6 +10,7 @@ const signup = async (req, res) => {
         age,
         address,
         phoneNumber,
+        role
     } = req.body;
 
     try {
@@ -28,11 +29,13 @@ const signup = async (req, res) => {
             age,
             address,
             phoneNumber,
+            role
         });
 
         if (user) {
             return res.status(201).json({
                 email: user.email,
+                role: user.role,
                 message: `Thanks for joining us, ${user.firstName}!`,
             });
         } else {
