@@ -38,7 +38,8 @@ function LoginForm() {
         }
         try {
             const response = await loginAPI(email, password);
-            setAccessToken(response.data.accessToken);
+            setAccessToken(response.data.accessToken)
+            localStorage.setItem('userRole', response.data.user.role);
             login();
             navigate('/profile');
         } catch (error) {
