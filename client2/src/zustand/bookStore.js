@@ -144,11 +144,15 @@ export const useBooksData = create((set, get) => ({
             try {
                 const response = await getBookByIdApi(id);
                 const bookData = response.data.data;
+                console.log(bookData)
                 const updatedBookCache = {...bookCache, [id]: bookData};
-                set(state => ({
+                console.log('updatedBookCache', updatedBookCache);
+                set({
                     bookCache: updatedBookCache,
                     bookDetails: bookData,
-                }));
+                });
+                const state = useBooksData.getState()
+                console.log(state.bookCache);
                 localStorage.setItem('bookCache', JSON.stringify(bookCache));
             } catch (error) {
                 set({error: 'Failed to fetch book details'});
@@ -156,6 +160,7 @@ export const useBooksData = create((set, get) => ({
                 set({loading: false});
             }
         }
+
     },
 
     updateBook: async (id, updatedData) => {

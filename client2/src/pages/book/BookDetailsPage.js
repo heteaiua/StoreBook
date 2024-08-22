@@ -6,6 +6,7 @@ import {useOrderdata} from "../../zustand/orderStore";
 import {LoadingErrorHandler} from "../../components/loading-error-handler/loading-error-handler";
 import {getRole} from "../../utils/authHelpers";
 import {Button} from "react-bootstrap";
+import BookViewDetails from "../../components/book-view/BookViewDetails";
 
 const BookDetailsPage = () => {
     const {id} = useParams();
@@ -14,8 +15,9 @@ const BookDetailsPage = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const {fetchBookById, bookDetails, error, loading} = useBooksData();
     const [quantity, setQuantity] = useState(1);
-    const {addBookToCart, isStockAvailable} = useOrderdata(state => ({
+    const {addBookToCart, cartItems} = useOrderdata(state => ({
         addBookToCart: state.addBookToCart,
+        cartItems: state.cartItems,
     }));
     const userRole = getRole();
     useEffect(() => {
@@ -49,7 +51,9 @@ const BookDetailsPage = () => {
             setQuantity(1);
         }
     }
-
+    const existingCartItem = cartItems.find(item => item.bookId === bookDetails?._id);
+    const cartQuantity = existingCartItem ? existingCartItem.quantity : 0;
+    const canAddMore = cartQuantity < bookDetails?.stockQuantity;
     if (!bookDetails) return <div>Book not found or an error occurred</div>;
     return (
         <LoadingErrorHandler loading={loading} error={error}>
@@ -60,22 +64,8 @@ const BookDetailsPage = () => {
                             <i className="bi bi-arrow-left"></i>
                         </button>
                     </div>
-                    <h1><b>{bookDetails.name}</b></h1>
-                    {bookDetails.imageURL &&
-                        <img src={bookDetails.imageURL} alt={bookDetails.title} className="book-image"/>}
-                    <div className="book-fields-container">
-                        <div className="book-fields">
-                            <p className="author-field"><strong>Author:</strong> {bookDetails.author}</p>
-                            <p><strong>Year:</strong> {bookDetails.year}</p>
-                            <p><strong>Genre:</strong> {bookDetails.genre}</p>
-                            <p><strong>Price:</strong> {bookDetails.price} RON</p>
-                            <p><strong>StockQuantity:</strong> {bookDetails.stockQuantity} </p>
-                        </div>
-                        <div className="book-description">
-                            <p>{bookDetails.description}.</p>
-                        </div>
-                    </div>
-                    {userRole && userRole !== 'admin' && (
+                    <BookViewDetails book={bookDetails} viewType={'large'}/>
+                    {userRole !== 'admin' && (
                         <>
                             <div className="quantity-container">
                                 <label className="quantity">Quantity:</label>
@@ -90,7 +80,7 @@ const BookDetailsPage = () => {
                                 />
                             </div>
                             <Button className="btn btn-secondary" onClick={handleAddToCart}
-                                    disabled={bookDetails.stockQuantity <= 0}>
+                                    disabled={!canAddMore || quantity > (bookDetails.stockQuantity - cartQuantity)}>
                                 Add to Cart
                             </Button>
                         </>

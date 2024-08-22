@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 import {getCurrentUser, updateUserAPI} from "../endpoints/userEndpoints";
-import {getAccessToken, removeAccessToken} from "../utils/authHelpers";
+import {getAccessToken, removeAccessToken, removeRole} from "../utils/authHelpers";
 
 export const useAuth = create((set, get) => ({
     user: {},
@@ -10,6 +10,7 @@ export const useAuth = create((set, get) => ({
     login: () => set({isAuthenticated: true}),
     logout: () => {
         removeAccessToken();
+        removeRole();
         set({isAuthenticated: false});
     },
     checkAuth: () => set({isAuthenticated: !!getAccessToken()}),

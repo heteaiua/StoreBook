@@ -1,8 +1,11 @@
 import React from 'react';
 import {Table} from 'react-bootstrap';
 import {calculateTotal, formatDate} from "../../utils/utils";
+import BookViewDetails from "../book-view/BookViewDetails";
 
-const OrdersTable = ({orders}) => {
+const OrdersTable = ({orders, bookDetails}) => {
+
+
     return (
         <Table striped bordered hover responsive>
             <thead>
@@ -21,17 +24,21 @@ const OrdersTable = ({orders}) => {
                     <td>{calculateTotal(items)} RON</td>
                     <td>
                         <ul>
-                            {items.map(({
-                                            _id: itemId,
-                                            bookId,
-                                            quantity,
-                                            price,
-
-                                        }, index) => (
-                                <li key={itemId || index}>
-                                    Book ID: {bookId}, Quantity: {quantity}, Price: {price} RON
-                                </li>
-                            ))}
+                            {items.map(({bookId, quantity, price}, index) => {
+                                const book = bookDetails[bookId];
+                                console.log(book);
+                                return (
+                                    <li key={index}>
+                                        {book ? (
+                                            <BookViewDetails book={book} viewType={'short'}/>
+                                        ) : (
+                                            <p>Loading book details...</p>
+                                        )}
+                                        <p><strong>Quantity:</strong> {quantity}</p>
+                                        <p><strong>Price:</strong> {price} RON</p>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </td>
                 </tr>
