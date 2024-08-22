@@ -52,7 +52,10 @@ const BookCard = ({propBook}) => {
                         <h4 className="book-price">{price} RON</h4>
                         <h4 className="book-stock">Stock:{stockQuantity}</h4>
                     </div>
-                    {imageURL && < img src={imageURL} alt={"img"} className="image-container"/>}
+                    {imageURL && < img
+                        src={imageURL}
+                        alt={"img"}
+                        className="image-container"/>}
                 </div>
                 <div className="book-buttons">
                     <Link to={`/books/${book._id}`} className="btn btn-secondary">View Details</Link>

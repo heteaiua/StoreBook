@@ -5,7 +5,7 @@ import {loginAPI} from '../../endpoints/userEndpoints';
 import {useNavigate} from 'react-router-dom';
 import {FaEye, FaEyeSlash} from 'react-icons/fa';
 import {useAuth} from "../../zustand/userStore"
-import {setAccessToken} from "../../utils/authHelpers";
+import {setAccessToken, setRole} from "../../utils/authHelpers";
 
 function LoginForm() {
     const [email, setEmail] = useState('');
@@ -39,7 +39,7 @@ function LoginForm() {
         try {
             const response = await loginAPI(email, password);
             setAccessToken(response.data.accessToken)
-            localStorage.setItem('userRole', response.data.user.role);
+            setRole(response.data.user.role);
             login();
             navigate('/profile');
         } catch (error) {

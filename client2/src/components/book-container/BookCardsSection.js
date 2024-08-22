@@ -6,11 +6,13 @@ import './book-grid.css';
 import {LoadingErrorHandler} from "../loading-error-handler/loading-error-handler";
 import {AddBookForm} from "./AddBookForm";
 import {Modal} from "../modal/Modal";
+import {getRole} from "../../utils/authHelpers";
 
 export const BookCardsSection = () => {
     const [isGridView, setIsGridView] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const userRole = getRole()
+    const [isAdmin, setIsAdmin] = useState(userRole === 'admin');
     const {
         filteredBooks,
         loading,
@@ -23,10 +25,7 @@ export const BookCardsSection = () => {
         limit: state.limit,
         filters: state.filters,
     }));
-    const userRole = localStorage.getItem('userRole');
-    useEffect(() => {
-        setIsAdmin(userRole === 'admin');
-    }, [userRole]);
+
     const handleViewToggle = () => {
         setIsGridView(prevState => !prevState);
     };
