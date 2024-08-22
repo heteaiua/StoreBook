@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import {useOrderdata} from "../../zustand/orderStore";
 import {LoadingErrorHandler} from "../loading-error-handler/loading-error-handler";
 import {getRole} from "../../utils/authHelpers";
+import BookViewDetails from "../book-view/BookViewDetails";
 
 const BookCard = ({propBook}) => {
     const [localError, setLocalError] = useState('');
@@ -20,14 +21,17 @@ const BookCard = ({propBook}) => {
         stockQuantity: 0,
         _id: ''
     };
-    const {name, author, year, genre, price, imageURL, stockQuantity} = book;
-    const {addBookToCart, error, loading, isStockAvailable} = useOrderdata(state => ({
+    const stockQuantity = book.stockQuantity;
+    const {addBookToCart, error, loading, isStockAvailable, cartItems} = useOrderdata(state => ({
         addBookToCart: state.addBookToCart,
         error: state.error,
         loading: state.loading,
-        isStockAvailable: state.isStockAvailable
+        isStockAvailable: state.isStockAvailable,
+        cartItems: state.cartItems,
     }));
     const userRole = getRole();
+    const existingCartItem = cartItems.find(item => item.bookId === book._id);
+    const cartQuantity = existingCartItem ? existingCartItem.quantity : 0;
     const handleAddToCart = async () => {
         try {
             await addBookToCart(book, 1);
@@ -44,28 +48,15 @@ const BookCard = ({propBook}) => {
     return (
         <LoadingErrorHandler loading={loading} error={error}>
             <div className="book-card">
-                <h2 className="book-title">{name}</h2>
-                <div className="book-layout">
-                    <div className="information-layout">
-                        <h4 className="book-author">{author}</h4>
-                        <div className="book-year">{year}</div>
-                        <h4 className="book-genre">{genre}</h4>
-                        <h4 className="book-price">{price} RON</h4>
-                        <h4 className="book-stock">Stock:{stockQuantity}</h4>
-                    </div>
-                    {imageURL && < img
-                        src={imageURL}
-                        alt={"img"}
-                        className="image-container"/>}
-                </div>
+                <BookViewDetails book={book} viewType={'medium'}/>
                 <div className="book-buttons">
                     <Link to={`/books/${book._id}`} className="btn btn-secondary">View Details</Link>
                     {
-                        userRole && userRole !== 'admin' && (
+                        userRole !== 'admin' && (
                             <Button
                                 className="btn btn-secondary"
                                 onClick={handleAddToCart}
-                                disabled={stockQuantity <= 0 || !isStockAvailable}
+                                disabled={stockQuantity <= 0 || !isStockAvailable || cartQuantity >= stockQuantity}
                             >
                                 Add book to Cart
                             </Button>

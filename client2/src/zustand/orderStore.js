@@ -13,7 +13,6 @@ export const useOrderdata = create((set, get) => ({
         try {
             const response = await getOrders();
             const orders = response.data.orders;
-            console.log('orders', response.data.orders)
             set({orders: orders, error: null});
         } catch (err) {
             set({error: "Error fetching orders"});
