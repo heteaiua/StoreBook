@@ -1,20 +1,19 @@
 import {create} from 'zustand';
-import {addBookToCartApi, getAllOrderApi, getOrderByUserIdApi} from '../endpoints/orderEndpoints';
+import {addBookToCartApi, getOrders} from '../endpoints/orderEndpoints';
 import {useBooksData} from "./bookStore";
 
 export const useOrderdata = create((set, get) => ({
     loading: false,
     error: null,
     orders: [],
-    userOrders: [],
     cartItems: [],
     isStockAvailable: true,
-    fetchOrders: async () => {
+    getOrdersByRole: async () => {
         set({loading: true, error: null});
         try {
-            const response = await getAllOrderApi();
-            const orders = response.data.data;
-            console.log('orders', orders)
+            const response = await getOrders();
+            const orders = response.data.orders;
+            console.log('orders', response.data.orders)
             set({orders: orders, error: null});
         } catch (err) {
             set({error: "Error fetching orders"});
@@ -132,17 +131,4 @@ export const useOrderdata = create((set, get) => ({
         }
         return {cartItems: state.cartItems};
     }),
-    getOrderByUserId: async (userId) => {
-        set({loading: true, error: null});
-        try {
-            const response = await getOrderByUserIdApi(userId);
-            const orders = response.data.data;
-            set({userOrders: orders, error: null});
-        } catch (err) {
-            console.error("Error fetching orders:", err);
-            set({error: 'Error fetching orders by userId.'});
-        } finally {
-            set({loading: false});
-        }
-    },
 }));

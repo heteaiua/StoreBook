@@ -40,8 +40,4 @@ export const useAuth = create((set, get) => ({
     },
     toggleEditMode: () => set((state) => ({editMode: !state.editMode})),
 
-    getUserId: () => {
-        const state = get();
-        return state.user._id;
-    }
 }));

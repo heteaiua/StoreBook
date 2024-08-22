@@ -41,7 +41,7 @@ function LoginForm() {
             setAccessToken(response.data.accessToken)
             setRole(response.data.user.role);
             login();
-            navigate('/profile');
+            navigate('/books');
         } catch (error) {
             console.error('Login failed:', error);
             if (error.response && error.response.data && error.response.data.message) {
