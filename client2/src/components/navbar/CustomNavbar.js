@@ -37,14 +37,16 @@ function CustomNavbar() {
                         </NavItem>
                         {isAuthenticated && (
                             <>
-                                {user && user.role === 'admin' && (
+                                {user && user.role === 'user' && (
                                     <NavItem>
-                                        <Nav.Link href="/orders">Orders</Nav.Link>
+                                        <Nav.Link href="/profile">Profile</Nav.Link>
                                     </NavItem>
+
                                 )}
                                 <NavItem>
-                                    <Nav.Link href="/profile">Profile</Nav.Link>
+                                    <Nav.Link href="/orders">Orders</Nav.Link>
                                 </NavItem>
+
                             </>
                         )}
                     </Nav>

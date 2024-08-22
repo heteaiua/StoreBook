@@ -1,17 +1,5 @@
 const orderService = require("../services/order.service");
 const bookService = require("../services/book.service");
-const getAllOrders = async (req, res) => {
-    try {
-        const orders = await orderService.getAll();
-        if (orders.length === 0) {
-            return res.status(204).json({message: "No orders found!", data: []});
-        }
-        res.status(200).json({message: "OrdersPage retrieved successfully", data: orders});
-
-    } catch (err) {
-        res.status(500).json({message: "Error! Could not get orders!", error: err.message});
-    }
-}
 const getOrderById = async (req, res) => {
     const orderId = req.params.orderId;
     try {
@@ -22,22 +10,6 @@ const getOrderById = async (req, res) => {
         res.status(200).json({message: "Order retrieved successfully", data: order});
     } catch (err) {
         res.status(500).json({message: "Error! Could not get order by id!", error: err.message});
-    }
-};
-
-const getOrderByUserId = async (req, res) => {
-    const {userId} = req.params;
-    if (!userId) {
-        return res.status(400).json({message: 'User ID is required.'});
-    }
-    try {
-        const order = await orderService.getByUserId(userId);
-        if (!order) {
-            return res.status(204).json({message: "No order found by user!"});
-        }
-        res.status(200).json({message: "Order retrieved successfully by user", data: order});
-    } catch (err) {
-        res.status(500).json({message: "Error! Could not get order by User id!", error: err.message});
     }
 };
 const addOrder = async (req, res) => {
@@ -134,12 +106,34 @@ const updateOrder = async (req, res) => {
     }
 };
 
+const getOrders = async (req, res) => {
+    const userId = req.user.id;
+    const userRole = req.user.role;
+
+    try {
+        let orders = await orderService.getAll();
+
+        if (userRole !== 'admin') {
+            orders = orders.filter(order => order.userId.toString() === userId.toString());
+        }
+
+        if (!orders || orders.length === 0) {
+            return res.status(204).json({message: "No orders"});
+        }
+        res.status(200).json({message: "Orders retrieved successfully", orders: orders});
+    } catch (err) {
+        res.status(500).json({
+            message: "Error! Could not get orders!",
+            error: err.message
+        })
+    }
+}
+
 module.exports = {
-    getAllOrders,
     getOrderById,
     addOrder,
     deleteOrder,
     deleteAllOrders,
     updateOrder,
-    getOrderByUserId
+    getOrders
 }

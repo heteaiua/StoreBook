@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useBooksData} from '../../zustand/bookStore';
 import './book-details.css'
-import {Button} from "react-bootstrap";
 import {useOrderdata} from "../../zustand/orderStore";
 import {LoadingErrorHandler} from "../../components/loading-error-handler/loading-error-handler";
+import {getRole} from "../../utils/authHelpers";
+import {Button} from "react-bootstrap";
 
 const BookDetailsPage = () => {
     const {id} = useParams();
@@ -16,6 +17,7 @@ const BookDetailsPage = () => {
     const {addBookToCart, isStockAvailable} = useOrderdata(state => ({
         addBookToCart: state.addBookToCart,
     }));
+    const userRole = getRole();
     useEffect(() => {
         if (id) {
             fetchBookById(id);
@@ -73,26 +75,34 @@ const BookDetailsPage = () => {
                             <p>{bookDetails.description}.</p>
                         </div>
                     </div>
-                    <div className="quantity-container">
-                        <label className="quantity">Quantity:</label>
-                        <input
-                            type="number"
-                            id="quantity"
-                            value={quantity}
-                            min="1"
-                            max={bookDetails.stockQuantity}
-                            onChange={handleQuantityChange}
-                            className="quantity-input"
-                        />
-                    </div>
-                    <Button className="btn btn-secondary" onClick={handleAddToCart}
-                            disabled={bookDetails.stockQuantity <= 0}>Add to Cart</Button>
+                    {userRole && userRole !== 'admin' && (
+                        <>
+                            <div className="quantity-container">
+                                <label className="quantity">Quantity:</label>
+                                <input
+                                    type="number"
+                                    id="quantity"
+                                    value={quantity}
+                                    min="1"
+                                    max={bookDetails.stockQuantity}
+                                    onChange={handleQuantityChange}
+                                    className="quantity-input"
+                                />
+                            </div>
+                            <Button className="btn btn-secondary" onClick={handleAddToCart}
+                                    disabled={bookDetails.stockQuantity <= 0}>
+                                Add to Cart
+                            </Button>
+                        </>
+                    )}
+
                     {successMessage && <div className="alert alert-success">{successMessage}</div>}
                     {localError && <div className="alert alert-danger">{localError}</div>}
                 </div>
             </div>
         </LoadingErrorHandler>
-    );
+    )
+        ;
 };
 
 export default BookDetailsPage;

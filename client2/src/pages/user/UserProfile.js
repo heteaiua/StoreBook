@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './user-profile.css'
 import {useAuth} from "../../zustand/userStore";
-import MyOrder from "../../components/myOrder/myOrder";
 
 const initializeFormData = (user) => ({
     firstName: user.firstName || '',
@@ -115,9 +114,6 @@ const UserProfile = () => {
                         <button className="btn btn-outline-secondary" onClick={toggleEditMode}>Edit</button>
                     </div>
                 )}
-            </div>
-            <div className="user-book-section">
-                {user && <MyOrder userId={user._id}/>}
             </div>
         </div>
 

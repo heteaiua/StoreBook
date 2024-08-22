@@ -4,6 +4,7 @@ import './book-card.css'
 import {Link} from "react-router-dom";
 import {useOrderdata} from "../../zustand/orderStore";
 import {LoadingErrorHandler} from "../loading-error-handler/loading-error-handler";
+import {getRole} from "../../utils/authHelpers";
 
 const BookCard = ({propBook}) => {
     const [localError, setLocalError] = useState('');
@@ -19,7 +20,6 @@ const BookCard = ({propBook}) => {
         stockQuantity: 0,
         _id: ''
     };
-
     const {name, author, year, genre, price, imageURL, stockQuantity} = book;
     const {addBookToCart, error, loading, isStockAvailable} = useOrderdata(state => ({
         addBookToCart: state.addBookToCart,
@@ -27,6 +27,7 @@ const BookCard = ({propBook}) => {
         loading: state.loading,
         isStockAvailable: state.isStockAvailable
     }));
+    const userRole = getRole();
     const handleAddToCart = async () => {
         try {
             await addBookToCart(book, 1);
@@ -59,13 +60,18 @@ const BookCard = ({propBook}) => {
                 </div>
                 <div className="book-buttons">
                     <Link to={`/books/${book._id}`} className="btn btn-secondary">View Details</Link>
-                    <Button
-                        className="btn btn-secondary"
-                        onClick={handleAddToCart}
-                        disabled={stockQuantity <= 0 || !isStockAvailable}
-                    >
-                        Add book to Cart
-                    </Button>
+                    {
+                        userRole && userRole !== 'admin' && (
+                            <Button
+                                className="btn btn-secondary"
+                                onClick={handleAddToCart}
+                                disabled={stockQuantity <= 0 || !isStockAvailable}
+                            >
+                                Add book to Cart
+                            </Button>
+                        )}
+
+
                 </div>
                 {successMessage && <div className="alert alert-success">{successMessage}</div>}
                 {localError && <div className="alert alert-danger">{localError}</div>}

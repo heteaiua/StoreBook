@@ -47,7 +47,7 @@ export default function DropdownCartOrders() {
             await sendOrder();
             setSuccessMessage('Order has been sent!');
             setTimeout(() => setSuccessMessage(''), 1000);
-            navigate('/profile');
+            navigate('/orders');
         } catch (error) {
             setLocalError('Order failed. Please try again.' + error.message);
             setTimeout(() => setLocalError(''), 1000);

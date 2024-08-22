@@ -5,21 +5,21 @@ import OrdersTable from "../../components/table/Table";
 import {LoadingErrorHandler} from "../../components/loading-error-handler/loading-error-handler";
 
 export default function OrdersPage() {
-    const {orders = [], loading, error, fetchOrders} = useOrderdata(state => ({
+    const {orders = [], loading, error, getOrdersByRole} = useOrderdata(state => ({
         orders: state.orders,
         loading: state.loading,
         error: state.error,
-        fetchOrders: state.fetchOrders
+        getOrdersByRole: state.getOrdersByRole
     }));
 
     useEffect(() => {
-        fetchOrders();
+        getOrdersByRole();
     }, []);
 
     return (
         <LoadingErrorHandler loading={loading} error={error}>
             <div className="order-page">
-                <h1 className="welcome-message">Orders</h1>
+                <h1 className="welcome-message"><span><i className="bi bi-send-check"></i></span>Orders</h1>
                 {orders.length === 0 ? (
                     <p>No orders found.</p>
                 ) : (
