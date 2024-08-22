@@ -26,13 +26,10 @@ const OrdersTable = ({orders}) => {
                                             bookId,
                                             quantity,
                                             price,
-                                            name,
-                                            author,
 
                                         }, index) => (
                                 <li key={itemId || index}>
-                                    Book ID: {bookId}, Quantity: {quantity}, Price: {price} RON, Title:{name},
-                                    Author: {author}
+                                    Book ID: {bookId}, Quantity: {quantity}, Price: {price} RON
                                 </li>
                             ))}
                         </ul>

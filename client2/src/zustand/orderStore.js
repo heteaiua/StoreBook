@@ -14,6 +14,7 @@ export const useOrderdata = create((set, get) => ({
         try {
             const response = await getAllOrderApi();
             const orders = response.data.data;
+            console.log('orders', orders)
             set({orders: orders, error: null});
         } catch (err) {
             set({error: "Error fetching orders"});
