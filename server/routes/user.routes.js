@@ -6,7 +6,9 @@ const {
     deleteUser,
     updateUser,
     filteredUsers,
-    deleteAllUsers
+    deleteAllUsers,
+    addBookToFavorites,
+    removeBookFromFavorites, getFavoritesBooksByUserId
 } = require("../controllers/user.controller");
 const {login, currentUser} = require("../auth/login");
 const signup = require("../auth/signup");
@@ -16,8 +18,11 @@ const router = express.Router();
 router.get("/filter", filteredUsers);
 router.get("/", getAllUsers);
 router.get("/auth/current", validateToken, currentUser);
+router.get('/favorites', validateToken, getFavoritesBooksByUserId);
 router.get("/:userId", getUserById);
 router.post("/", addUser);
+router.post('/favorites/:bookId', validateToken, addBookToFavorites);
+router.delete('/favorites/:bookId', validateToken, removeBookFromFavorites);
 router.post("/signup", signup);
 router.post("/login", login);
 router.delete("/:userId", deleteUser);

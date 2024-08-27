@@ -10,6 +10,7 @@ import OrdersPage from "./pages/order/OrdersPage";
 import Register from './pages/register/Register';
 import UserProfile from "./pages/user/UserProfile";
 import ProtectedRoute from "./components/ProtectedRoute";
+import OrderDetailsPage from "./pages/order/OrderDetailsPage";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
                         <Route path="/books/:id" element={<BookDetailsPage/>}/>
                         <Route path="/orders" element={<ProtectedRoute element={<OrdersPage/>}/>}/>
                         <Route path="/profile" element={<ProtectedRoute element={<UserProfile/>}/>}/>
+                        <Route path="/orders/:id" element={<ProtectedRoute element={<OrderDetailsPage/>}/>}/>
                     </Routes>
                 </div>
             </div>

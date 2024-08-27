@@ -1,16 +1,15 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Button} from "react-bootstrap";
 import './book-card.css'
 import {Link} from "react-router-dom";
 import {useOrderdata} from "../../zustand/orderStore";
-import {LoadingErrorHandler} from "../loading-error-handler/loading-error-handler";
 import {getRole} from "../../utils/authHelpers";
 import BookViewDetails from "../book-view/BookViewDetails";
+import {useBooksData} from "../../zustand/bookStore";
 
 const BookCard = ({propBook}) => {
     const [localError, setLocalError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
-
     const book = propBook || {
         name: 'Unknown Title',
         author: 'Unknown Author',
@@ -32,6 +31,14 @@ const BookCard = ({propBook}) => {
     const userRole = getRole();
     const existingCartItem = cartItems.find(item => item.bookId === book._id);
     const cartQuantity = existingCartItem ? existingCartItem.quantity : 0;
+    const {addBookToFavorite, removeBookFromFavorite, favoriteItems, checkIsFavorite} = useBooksData(state => ({
+        addBookToFavorite: state.addBookToFavorite,
+        removeBookFromFavorite: state.removeBookFromFavorite,
+        favoriteItems: state.favoriteItems,
+        checkIsFavorite: state.checkIsFavorite
+    }));
+    const [isBookFavorite, setIsBookFavorite] = useState(false);
+
     const handleAddToCart = async () => {
         try {
             await addBookToCart(book, 1);
@@ -45,14 +52,46 @@ const BookCard = ({propBook}) => {
             setTimeout(() => setSuccessMessage(''), 2000);
         }
     };
+    const handleAddToFavorite = async () => {
+        try {
+            await addBookToFavorite(book._id);
+            setIsBookFavorite(true)
+            setSuccessMessage('Book added to favorites!');
+            setLocalError('');
+            setIsBookFavorite(true);
+        } catch (err) {
+            setLocalError('Failed to add book to favorites. Please try again.' + error.message);
+            setSuccessMessage('');
+        }
+    };
+    useEffect(() => {
+        const checkIsFavorite = favoriteItems.some((fav) => fav === book._id);
+        console.log(book._id, favoriteItems, checkIsFavorite)
+        if (checkIsFavorite) {
+            setIsBookFavorite(true)
+        } else {
+            setIsBookFavorite(false)
+        }
+    }, [favoriteItems]);
+
     return (
-        <LoadingErrorHandler loading={loading} error={error}>
-            <div className="book-card">
-                <BookViewDetails book={book} viewType={'medium'}/>
-                <div className="book-buttons">
-                    <Link to={`/books/${book._id}`} className="btn btn-secondary">View Details</Link>
-                    {
-                        userRole !== 'admin' && (
+        <div className="book-card">
+            <BookViewDetails book={book} viewType={'medium'}/>
+            <div className="book-buttons">
+                <Link to={`/books/${book._id}`} className="btn btn-secondary">View Details</Link>
+                {
+                    userRole !== 'admin' && (
+                        <>
+                            <Button
+                                className="btn btn-light"
+                                onClick={handleAddToFavorite}
+                            >
+                                {isBookFavorite ? (
+                                    <i className="bi bi-heart-fill"></i>
+                                ) : (
+                                    <i className="bi bi-heart"></i>
+                                )}
+                            </Button>
                             <Button
                                 className="btn btn-secondary"
                                 onClick={handleAddToCart}
@@ -60,14 +99,12 @@ const BookCard = ({propBook}) => {
                             >
                                 Add book to Cart
                             </Button>
-                        )}
-
-
-                </div>
-                {successMessage && <div className="alert alert-success">{successMessage}</div>}
-                {localError && <div className="alert alert-danger">{localError}</div>}
+                        </>
+                    )}
             </div>
-        </LoadingErrorHandler>
+            {successMessage && <div className="alert alert-success">{successMessage}</div>}
+            {localError && <div className="alert alert-danger">{localError}</div>}
+        </div>
     );
 };
 

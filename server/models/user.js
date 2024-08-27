@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
     age: {type: Number, required: true},
     address: {type: String, required: true},
     phoneNumber: {type: String, required: true},
-    role: {type: String, enum: ['admin', 'user'], default: 'user'}
+    role: {type: String, enum: ['admin', 'user']},
+    favoriteBooks: [{type: mongoose.Schema.Types.ObjectId, ref: 'Book'}]
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);

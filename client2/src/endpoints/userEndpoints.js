@@ -35,4 +35,23 @@ export const updateUserAPI = async (userId, updates) => {
         throw error;
     }
 };
+export const addBookToFavoriteApi = async (bookId) => {
+    return axios.post(`${userURL}/favorites/${bookId}`, {}, {
+        headers: {
+            'Authorization': `Bearer ${getAccessToken()}`
+        }
+    });
+};
+export const getFavoriteBooksApi = async () => axios.get(`${userURL}/favorites`, {
+    headers: {
+        Authorization: `Bearer ${getAccessToken()}`
+    }
+})
+export const removeBookFromFavoritesApi = async (bookId) => {
+    return axios.delete(`${userURL}/favorites/${bookId}`, {
+        headers: {
+            'Authorization': `Bearer ${getAccessToken()}`
+        }
+    });
+};
 

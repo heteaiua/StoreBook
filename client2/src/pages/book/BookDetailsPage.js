@@ -13,18 +13,20 @@ const BookDetailsPage = () => {
     const navigate = useNavigate();
     const [localError, setLocalError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
-    const {fetchBookById, bookDetails, error, loading} = useBooksData();
+    const {fetchBookById, bookDetails, error, loading, setBookDetails} = useBooksData();
     const [quantity, setQuantity] = useState(1);
     const {addBookToCart, cartItems} = useOrderdata(state => ({
         addBookToCart: state.addBookToCart,
         cartItems: state.cartItems,
     }));
     const userRole = getRole();
+
     useEffect(() => {
         if (id) {
             fetchBookById(id);
         }
     }, [id]);
+
     const handleBackClick = () => {
         navigate('/books');
     };
@@ -56,41 +58,42 @@ const BookDetailsPage = () => {
     const canAddMore = cartQuantity < bookDetails?.stockQuantity;
     if (!bookDetails) return <div>Book not found or an error occurred</div>;
     return (
-        <LoadingErrorHandler loading={loading} error={error}>
-            <div className="background-book-details">
-                <div className="book-details">
-                    <div>
-                        <button onClick={handleBackClick} className="back-button">
-                            <i className="bi bi-arrow-left"></i>
-                        </button>
-                    </div>
-                    <BookViewDetails book={bookDetails} viewType={'large'}/>
-                    {userRole !== 'admin' && (
-                        <>
-                            <div className="quantity-container">
-                                <label className="quantity">Quantity:</label>
-                                <input
-                                    type="number"
-                                    id="quantity"
-                                    value={quantity}
-                                    min="1"
-                                    max={bookDetails.stockQuantity}
-                                    onChange={handleQuantityChange}
-                                    className="quantity-input"
-                                />
-                            </div>
-                            <Button className="btn btn-secondary" onClick={handleAddToCart}
-                                    disabled={!canAddMore || quantity > (bookDetails.stockQuantity - cartQuantity)}>
-                                Add to Cart
-                            </Button>
-                        </>
-                    )}
 
-                    {successMessage && <div className="alert alert-success">{successMessage}</div>}
-                    {localError && <div className="alert alert-danger">{localError}</div>}
+        <div className="background-book-details">
+            <div className="book-details">
+                <div>
+                    <button onClick={handleBackClick} className="back-button">
+                        <i className="bi bi-arrow-left"></i>
+                    </button>
                 </div>
+                <LoadingErrorHandler loading={loading} error={error}>
+                    <BookViewDetails book={bookDetails} viewType={'large'}/>
+                </LoadingErrorHandler>
+                {userRole !== 'admin' && (
+                    <>
+                        <div className="quantity-container">
+                            <label className="quantity">Quantity:</label>
+                            <input
+                                type="number"
+                                id="quantity"
+                                value={quantity}
+                                min="1"
+                                max={bookDetails.stockQuantity}
+                                onChange={handleQuantityChange}
+                                className="quantity-input"
+                            />
+                        </div>
+                        <Button className="btn btn-secondary" onClick={handleAddToCart}
+                                disabled={!canAddMore || quantity > (bookDetails.stockQuantity - cartQuantity)}>
+                            Add to Cart
+                        </Button>
+                    </>
+                )}
+                {successMessage && <div className="alert alert-success">{successMessage}</div>}
+                {localError && <div className="alert alert-danger">{localError}</div>}
             </div>
-        </LoadingErrorHandler>
+        </div>
+
     )
         ;
 };
