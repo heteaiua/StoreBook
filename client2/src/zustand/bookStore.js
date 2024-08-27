@@ -1,12 +1,12 @@
 import {create} from "zustand";
 import {
     addBookApi,
-    getAllBookApi,
     getAllBookFilteredApi,
     getBookByIdApi,
     getUniqueFieldsApi,
     updateBookApi
 } from "../endpoints/bookEndpoints";
+import {addBookToFavoriteApi, getFavoriteBooksApi, removeBookFromFavoritesApi} from "../endpoints/userEndpoints";
 
 const initialState = {
     loading: false,
@@ -28,12 +28,14 @@ const initialState = {
     totalItems: 0,
     bookDetails: null,
     bookCache: {},
+    favoriteItems: [],
+    favoriteCache: {},
 };
 
 export const useBooksData = create((set, get) => ({
     ...initialState,
     setItemsLimitPerPage: (limit) => set({limit, page: 1}),
-
+    setBookDetails: (bookDetails) => set({bookDetails}),
     setFilters: (filterType, value) => set(state => ({
         filters: {
             ...state.filters,
@@ -54,20 +56,6 @@ export const useBooksData = create((set, get) => ({
             return {filters: resetFilters, page: 1, limit: 5};
         });
     },
-
-    fetchBooks: async () => {
-        set({loading: true, error: null});
-        try {
-            const response = await getAllBookApi();
-            const books = await response.data.data;
-            set({data: books})
-        } catch (error) {
-            set({error: 'Failed to fetch books'})
-        } finally {
-            set({loading: false});
-        }
-    },
-
     getFilteredBooks: async () => {
         const {page, limit, filters} = get();
         set({loading: true, error: null});
@@ -139,28 +127,28 @@ export const useBooksData = create((set, get) => ({
 
     fetchBookById: async (id) => {
         const {bookCache} = get();
-        if (!bookCache[id]) {
-            set({loading: true, error: null});
-            try {
-                const response = await getBookByIdApi(id);
-                const bookData = response.data.data;
-                console.log(bookData)
-                const updatedBookCache = {...bookCache, [id]: bookData};
-                console.log('updatedBookCache', updatedBookCache);
-                set({
-                    bookCache: updatedBookCache,
-                    bookDetails: bookData,
-                });
-                const state = useBooksData.getState()
-                console.log(state.bookCache);
-                localStorage.setItem('bookCache', JSON.stringify(bookCache));
-            } catch (error) {
-                set({error: 'Failed to fetch book details'});
-            } finally {
-                set({loading: false});
-            }
+        if (bookCache[id]) {
+            set({
+                bookDetails: bookCache[id],
+            });
+            return;
         }
-
+        set({loading: true, error: null});
+        try {
+            const response = await getBookByIdApi(id);
+            const bookData = response.data.data;
+            const updatedBookCache = {...bookCache, [id]: bookData};
+            set({
+                bookCache: updatedBookCache,
+                bookDetails: bookData,
+            });
+            const state = useBooksData.getState()
+            localStorage.setItem('bookCache', JSON.stringify(bookCache));
+        } catch (error) {
+            set({error: 'Failed to fetch book details'});
+        } finally {
+            set({loading: false});
+        }
     },
 
     updateBook: async (id, updatedData) => {
@@ -168,12 +156,14 @@ export const useBooksData = create((set, get) => ({
         try {
             const response = await updateBookApi(id, updatedData);
             const updatedBook = response.data.data;
-
             set(state => {
                 const updatedBookCache = {...state.bookCache, [id]: updatedBook};
+                console.log(updatedBookCache)
                 return {
-                    bookCache: updatedBookCache,
-                    data: state.data.map(book => book._id === id ? updatedBook : book)
+                    bookCache: updatedBook,
+                    bookDetails: updatedBook,
+                    filteredBooks: state.filteredBooks.map(book => book._id === id ? updatedBook : book),
+
                 };
             });
         } catch (error) {
@@ -197,5 +187,64 @@ export const useBooksData = create((set, get) => ({
         } finally {
             set({loading: false});
         }
+    },
+    addBookToFavorite: async (bookId) => {
+        const {favoriteItems} = get();
+        const existingBookIndex = favoriteItems.findIndex(item => item.bookId === bookId);
+
+        if (existingBookIndex === -1) {
+            set({loading: true, error: null});
+            try {
+                const response = await addBookToFavoriteApi(bookId);
+                const newFavorite = response.data.bookId;
+                console.log(newFavorite, 'newwwwwwwwwww')
+                set(state => ({
+                    favoriteItems: [...state.favoriteItems, newFavorite],
+                }));
+            } catch (error) {
+                console.error(error);
+                set({error: 'Failed to add book to favorites'});
+            } finally {
+                set({loading: false});
+            }
+
+        } else {
+            console.log('Book already in favorites');
+            set({error: 'Book already in favorites'})
+        }
+    },
+    fetchFavoriteBooks: async () => {
+        try {
+            const response = await getFavoriteBooksApi();
+            set({favoriteItems: response.data});
+            console.log('favorite items', response.data);
+        } catch (error) {
+            console.error('Failed to fetch favorite items:', error);
+        }
+    },
+    removeBookFromFavorite: async (bookId) => {
+        const {favoriteItems} = get();
+        const isFavorite = favoriteItems.some(item => item._id === bookId);
+
+        if (isFavorite) {
+            set({loading: true, error: null});
+            try {
+                await removeBookFromFavoritesApi(bookId);
+                set(state => ({
+                    favoriteItems: state.favoriteItems.filter(item => item._id !== bookId),
+                }));
+            } catch (error) {
+                console.error(error);
+                set({error: 'Failed to remove book from favorites'});
+            } finally {
+                set({loading: false});
+            }
+        } else {
+            set({error: 'Book not in favorites'});
+        }
+    },
+    checkIsFavorite: (bookId) => {
+        const {favoriteItems} = get();
+        return favoriteItems.some(item => item._id === bookId);
     }
 }));

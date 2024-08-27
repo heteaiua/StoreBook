@@ -8,12 +8,27 @@ export const useOrderdata = create((set, get) => ({
     orders: [],
     cartItems: [],
     isStockAvailable: true,
+    ordersCache: [],
+    selectedOrder: {},
+    resetOrdersCache: () => {
+        set({ordersCache: [], orders: []});
+    },
+    setSelectedOrder: (order) => {
+        set({selectedOrder: order});
+    },
     getOrdersByRole: async () => {
+        const {ordersCache} = get();
+        if (ordersCache.length > 0) {
+            set({
+                orders: ordersCache,
+            });
+            return;
+        }
         set({loading: true, error: null});
         try {
             const response = await getOrders();
-            const orders = response.data.orders;
-            set({orders: orders, error: null});
+            const orders = response.data.orders || [];
+            set({orders: orders, error: null, ordersCache: orders});
         } catch (err) {
             set({error: "Error fetching orders"});
         } finally {
@@ -22,7 +37,7 @@ export const useOrderdata = create((set, get) => ({
     },
     addBookToCart: async (book, quantity) => {
         set({loading: true, error: null});
-        const {cartItems, isStockAvailable} = get();
+        const {cartItems} = get();
         const existingBookIndex = cartItems.findIndex(item => item.bookId === book._id);
 
         if (!useBooksData.getState().bookCache[book._id]) {
@@ -63,41 +78,27 @@ export const useOrderdata = create((set, get) => ({
         }
     },
 
-    checkStock: () => {
-        const {cartItems} = get();
-        const bookCache = useBooksData.getState().bookCache;
-        let isStockAvailable = true;
-
-        for (const item of cartItems) {
-            const book = bookCache[item.bookId];
-            if (book && item.quantity > book.stockQuantity) {
-                isStockAvailable = false;
-                break;
-            }
-        }
-        set({isStockAvailable});
+    setOrdersCache: (newOrder) => {
+        set({ordersCache: [...get().orders, newOrder]})
     },
 
     sendOrder: async () => {
+        const updateBook = useBooksData.getState().updateBook;
+        const {cartItems} = get();
         set({loading: true, error: null});
-        const {cartItems, isStockAvailable} = get();
-        if (!isStockAvailable) {
-            set({error: 'Insufficient stock for book.', loading: false});
-            return;
-        }
         try {
             const response = await addBookToCartApi({
                 items: cartItems,
                 date: new Date().toISOString(),
             });
-
             if (response.status !== 201) {
                 set({error: response.data.message || 'Error sending order.', loading: false});
                 return;
             }
-            set({cartItems: [], isStockAvailable: true});
-            return response.data;
+            cartItems.map((item) => updateBook(item.bookId, {stockQuantity: item.stockQuantity - item.quantity}))
 
+            set({cartItems: [], setOrdersCache: response.data, loading: false});
+            return response.data;
         } catch (err) {
             console.error("Error sending order:", err);
             set({error: 'Error sending order.'});

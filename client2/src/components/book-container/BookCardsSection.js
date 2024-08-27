@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import BookCard from "./BookCard";
+import BookCard from "./BookCard"
 import {useBooksData} from "../../zustand/bookStore";
 import {PaginationControls} from "../pagination/Pagination";
 import './book-grid.css';
@@ -17,7 +17,9 @@ export const BookCardsSection = () => {
         filteredBooks,
         loading,
         error,
+        fetchFavoriteBooks,
         getFilteredBooks,
+        favoriteItems
     } = useBooksData();
 
     const {page, limit, filters} = useBooksData(state => ({
@@ -42,6 +44,14 @@ export const BookCardsSection = () => {
         getFilteredBooks();
     }, [page, limit, filters]);
 
+    useEffect(() => {
+        const response = async () => {
+            await fetchFavoriteBooks();
+        }
+        response();
+    }, []);
+
+
     return (
         <LoadingErrorHandler loading={loading} error={error}>
             <>
@@ -54,7 +64,6 @@ export const BookCardsSection = () => {
                     </button>
                     {isAdmin && (
                         <button id="btn3" onClick={handleOpenModal} className="btn btn-primary">Add</button>
-
                     )}
                 </div>
                 <div className={isGridView ? "book-grid" : "book-list"}>
@@ -64,6 +73,7 @@ export const BookCardsSection = () => {
                                 key={book._id}
                                 propBook={book}
                             />
+
                         ))
                     ) : (
                         <p>No books available</p>

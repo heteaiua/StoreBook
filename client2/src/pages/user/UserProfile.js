@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './user-profile.css'
 import {useAuth} from "../../zustand/userStore";
+import {FavoriteBooks} from "../../components/favorite-books/FavoriteBooks";
 
 const initializeFormData = (user) => ({
     firstName: user.firstName || '',
@@ -51,7 +52,7 @@ const UserProfile = () => {
         setFormData(initializeFormData(user));
     };
     return (
-        <div className="order-page">
+        <div>
             <h1 className="welcome-message">{user.firstName}'s profile</h1>
             <div className="data-container">
                 {editMode ? (
@@ -114,7 +115,11 @@ const UserProfile = () => {
                         <button className="btn btn-outline-secondary" onClick={toggleEditMode}>Edit</button>
                     </div>
                 )}
+                <div className="profile-icon">
+                    <i className="bi bi-person-circle"></i>
+                </div>
             </div>
+            <FavoriteBooks/>
         </div>
 
     );

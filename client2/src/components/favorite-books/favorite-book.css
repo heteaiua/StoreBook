@@ -1,0 +1,41 @@
+.favorite-books-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.books-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.book-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.book-title {
+    font-size: 18px;
+    margin: 0;
+    color: #555;
+}
+
+.book-author {
+    font-size: 14px;
+    color: #777;
+}
+
+.no-books-message {
+    font-size: 16px;
+    color: #999;
+}

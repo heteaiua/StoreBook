@@ -1,73 +1,73 @@
 import React, {useEffect} from 'react';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import {Button, NavItem} from 'react-bootstrap';
 import './CustomNavbar.css'
 import DropdownCartOrders from "../../pages/order/DropdownCartOrders";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "../../zustand/userStore";
+import {useOrderdata} from "../../zustand/orderStore";
 
 function CustomNavbar() {
     const navigate = useNavigate()
     const {isAuthenticated, logout, checkAuth, user, fetchUser} = useAuth();
+    const {resetOrdersCache} = useOrderdata();
 
     useEffect(() => {
         checkAuth();
         if (isAuthenticated) {
+
             fetchUser();
         }
     }, [isAuthenticated]);
 
     const handleLogout = () => {
+        resetOrdersCache();
         logout();
         navigate('/login');
     };
-
-
     return (
-        <Navbar className="nav-style">
-            <Container>
-                <Navbar.Brand href="/"><span className="bi bi-shop">BookStore</span></Navbar.Brand>
-                <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
-                <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav className="me-auto">
-                        <NavItem>
-                            <Nav.Link href="/books">Books</Nav.Link>
-                        </NavItem>
-                        {isAuthenticated && (
-                            <>
-                                {user && user.role === 'user' && (
-                                    <NavItem>
-                                        <Nav.Link href="/profile">Profile</Nav.Link>
-                                    </NavItem>
+        <nav className="navbar-custom">
+            <div className="navbar-brand">
+                <Link to="/" className="navbar-logo">
+                    <span className="bi bi-shop">BookStore</span>
+                </Link>
+            </div>
+            <div className="navbar-toggle">
 
-                                )}
-                                <NavItem>
-                                    <Nav.Link href="/orders">Orders</Nav.Link>
-                                </NavItem>
-
-                            </>
-                        )}
-                    </Nav>
-                    <Nav>
-                        {!isAuthenticated ? (
-                            <>
-                                <NavItem>
-                                    <Nav.Link href="/login">Login</Nav.Link>
-                                </NavItem>
-                                <NavItem>
-                                    <Nav.Link href="/register">Register</Nav.Link>
-                                </NavItem>
-                            </>
-                        ) : (
-                            <Button onClick={handleLogout}>LOG OUT</Button>
-                        )}
+                <ul className="navbar-menu">
+                    <li className="navbar-item">
                         <DropdownCartOrders/>
-                    </Nav>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
+                    </li>
+                    <li className="navbar-item">
+                        <Link to="/books" className="navbar-link">Books</Link>
+                    </li>
+                    {isAuthenticated && user?.role === 'user' && (
+                        <li className="navbar-item">
+                            <Link to="/profile" className="navbar-link">Profile</Link>
+                        </li>
+                    )}
+                    {isAuthenticated && (
+                        <>
+                            <li className="navbar-item">
+                                <Link to="/orders" className="navbar-link">Orders</Link>
+                            </li>
+                            <li className="navbar-item">
+                                <button className="btn btn-secondary" onClick={handleLogout}>LOG OUT</button>
+                            </li>
+                        </>
+                    )}
+                    {!isAuthenticated && (
+                        <>
+                            <li className="navbar-item">
+                                <Link to="/login" className="navbar-link">Login</Link>
+                            </li>
+                            <li className="navbar-item">
+                                <Link to="/register" className="navbar-link">Register</Link>
+                            </li>
+                        </>
+                    )}
+
+                </ul>
+            </div>
+        </nav>
     );
 }
 

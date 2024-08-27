@@ -6,7 +6,7 @@ const BookDetails = ({book, viewType}) => {
     const renderLargeView = () => (
         <div>
             <h1><b>{book.name}</b></h1>
-            <img src={book.imageURL} alt={book.title}/>
+            <img src={book.imageURL} alt={book.title} className="book-image"/>
             <div className="book-fields-container">
                 <div className="book-fields">
                     <p className="author-field"><strong>Author:</strong> {book.author}</p>
@@ -48,11 +48,13 @@ const BookDetails = ({book, viewType}) => {
         </div>
     );
 
+
     return (
         <div>
             {viewType === 'large' && renderLargeView()}
             {viewType === 'medium' && renderMediumView()}
             {viewType === 'short' && renderShortView()}
+
         </div>
     );
 };
