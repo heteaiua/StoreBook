@@ -45,6 +45,7 @@ function LoginForm() {
         } catch (error) {
             console.error('Login failed:', error);
             if (error.response && error.response.data && error.response.data.message) {
+                console.log(error.response.data.message)
                 setErrors({server: error.response.data.message});
             } else {
                 setErrors({server: "An unexpected error occurred"});

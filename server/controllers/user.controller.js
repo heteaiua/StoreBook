@@ -162,70 +162,88 @@ function parseFilter(value) {
 const addBookToFavorites = async (req, res) => {
     const {bookId} = req.params;
     const userId = req.user.id;
+
     if (!bookId) {
-        return res.status(400).json({message: 'Book Id is required'});
+        return res.status(400).json({message: 'Book ID is required'});
     }
+
     try {
         const user = await UserModel.findById(userId);
+
         if (!user) {
             return res.status(404).json({message: 'User not found'});
         }
-        const bookAlreadyFavorited = user.favoriteBooks.indexOf(bookId);
-        if (bookAlreadyFavorited !== -1) {
+
+        const bookAlreadyFavorited = user.favoriteBooks.some(
+            (favBookId) => favBookId.toString() === bookId
+        );
+
+        if (bookAlreadyFavorited) {
             return res.status(400).json({message: 'Book is already in favorites'});
         }
+
         user.favoriteBooks.push(bookId);
         await user.save();
 
-        res.status(200).json({message: 'Book added to favorites', bookId: bookId});
+        res.status(200).json({message: 'Book added to favorites', bookId});
     } catch (error) {
-        console.error(error);
+        console.error('Error adding book to favorites:', error);
         res.status(500).json({message: 'Failed to add book to favorites'});
     }
 };
+
 
 const removeBookFromFavorites = async (req, res) => {
     const {bookId} = req.params;
     const userId = req.user.id;
 
     if (!bookId) {
-        return res.status(400).json({message: 'Book Id is required'});
+        return res.status(400).json({message: 'Book ID is required'});
     }
+
     try {
         const user = await UserModel.findById(userId);
-        console.log(userId, 'userId')
+
         if (!user) {
             return res.status(404).json({message: 'User not found'});
         }
-        const bookIndex = user.favoriteBooks.indexOf(bookId);
-        console.log(bookIndex)
+
+        const bookIndex = user.favoriteBooks.findIndex(
+            (favBookId) => favBookId.toString() === bookId
+        );
+
         if (bookIndex === -1) {
             return res.status(400).json({message: 'Book not in favorites'});
         }
+
         user.favoriteBooks.splice(bookIndex, 1);
         await user.save();
 
-        res.status(200).json({message: 'Book removed from favorites'});
+        res.status(200).json({message: 'Book removed from favorites', bookId});
     } catch (error) {
-        console.error(error);
+        console.error('Error removing book from favorites:', error);
         res.status(500).json({message: 'Failed to remove book from favorites'});
     }
 };
 
 const getFavoritesBooksByUserId = async (req, res) => {
     const userId = req.user.id;
+
     try {
-        const user = await UserModel.findById(userId).populate('favoriteBooks');
+        const user = await UserModel.findById(userId).select('favoriteBooks');
 
         if (!user) {
             return res.status(404).json({message: 'User not found'});
         }
-        res.status(200).json(user.favoriteBooks);
+
+        const favoriteBookIds = user.favoriteBooks;
+        res.status(200).json(favoriteBookIds);
     } catch (error) {
-        console.error(error);
+        console.error('Error getting favorite books:', error);
         res.status(500).json({message: 'Failed to get favorite books'});
     }
 };
+
 
 module.exports = {
     getAllUsers,

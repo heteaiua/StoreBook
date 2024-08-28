@@ -130,6 +130,8 @@ export const useBooksData = create((set, get) => ({
         if (bookCache[id]) {
             set({
                 bookDetails: bookCache[id],
+                bookCache: bookCache[id]
+
             });
             return;
         }
@@ -188,35 +190,40 @@ export const useBooksData = create((set, get) => ({
             set({loading: false});
         }
     },
+
     addBookToFavorite: async (bookId) => {
         const {favoriteItems} = get();
-        const existingBookIndex = favoriteItems.findIndex(item => item.bookId === bookId);
-
-        if (existingBookIndex === -1) {
+        const isFavorite = favoriteItems.includes(bookId);
+        if (!isFavorite) {
             set({loading: true, error: null});
             try {
                 const response = await addBookToFavoriteApi(bookId);
-                const newFavorite = response.data.bookId;
-                console.log(newFavorite, 'newwwwwwwwwww')
+                const newFavoriteBookId = response.data.bookId;
+
                 set(state => ({
-                    favoriteItems: [...state.favoriteItems, newFavorite],
+                    favoriteItems: [...state.favoriteItems, newFavoriteBookId],
                 }));
             } catch (error) {
-                console.error(error);
+                console.error('Failed to add book to favorites:', error);
                 set({error: 'Failed to add book to favorites'});
             } finally {
                 set({loading: false});
             }
-
         } else {
             console.log('Book already in favorites');
-            set({error: 'Book already in favorites'})
+            set({error: 'Book already in favorites'});
         }
     },
+
     fetchFavoriteBooks: async () => {
         try {
             const response = await getFavoriteBooksApi();
-            set({favoriteItems: response.data});
+            const favoriteIds = response.data;
+            set({favoriteItems: favoriteIds});
+            console.log(favoriteIds, "IDS")
+            for (const fav of favoriteIds) {
+                await get().fetchBookById(fav);
+            }
             console.log('favorite items', response.data);
         } catch (error) {
             console.error('Failed to fetch favorite items:', error);
@@ -224,17 +231,18 @@ export const useBooksData = create((set, get) => ({
     },
     removeBookFromFavorite: async (bookId) => {
         const {favoriteItems} = get();
-        const isFavorite = favoriteItems.some(item => item._id === bookId);
+        const isFavorite = favoriteItems.includes(bookId);
 
         if (isFavorite) {
             set({loading: true, error: null});
             try {
                 await removeBookFromFavoritesApi(bookId);
+
                 set(state => ({
-                    favoriteItems: state.favoriteItems.filter(item => item._id !== bookId),
+                    favoriteItems: state.favoriteItems.filter(id => id !== bookId),
                 }));
             } catch (error) {
-                console.error(error);
+                console.error('Failed to remove book from favorites:', error);
                 set({error: 'Failed to remove book from favorites'});
             } finally {
                 set({loading: false});
@@ -243,8 +251,9 @@ export const useBooksData = create((set, get) => ({
             set({error: 'Book not in favorites'});
         }
     },
+
     checkIsFavorite: (bookId) => {
         const {favoriteItems} = get();
-        return favoriteItems.some(item => item._id === bookId);
-    }
+        return favoriteItems.includes(bookId);
+    },
 }));

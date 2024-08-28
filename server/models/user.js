@@ -6,16 +6,22 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true,
+        unique: [true, 'This email address is taken'],
         match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
     },
     password: {type: String, required: true},
     age: {type: Number, required: true},
     address: {type: String, required: true},
     phoneNumber: {type: String, required: true},
-    role: {type: String, enum: ['admin', 'user']},
-    favoriteBooks: [{type: mongoose.Schema.Types.ObjectId, ref: 'Book'}]
+    role: {type: String, enum: ['admin', 'user'], required: true, default: 'user'},
+    favoriteBooks: [{type: mongoose.Schema.Types.ObjectId, ref: 'Book'}],
+    loginAttempts: {type: Number, required: true, default: 0},
+    lockUntil: {type: Date}
 });
+
+userSchema.methods.isLocked = function () {
+    return !!(this.lockUntil && this.lockUntil > Date.now());
+};
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 

@@ -119,9 +119,12 @@
 }
 
 .password-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     right: 100px;
-    top: 39%;
+    top: 38.5%;
     transform: translateY(-50%);
     background: none;
     border: none;

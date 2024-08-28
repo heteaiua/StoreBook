@@ -6,7 +6,7 @@ import {useBooksData} from "../../zustand/bookStore";
 export const FavoriteBooks = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const {fetchFavoriteBooks, favoriteItems = [], removeBookFromFavorite} = useBooksData();
+    const {fetchFavoriteBooks, favoriteItems = [], removeBookFromFavorite, bookCache} = useBooksData();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -35,15 +35,19 @@ export const FavoriteBooks = () => {
                 <h2 className="title">Favorite Books</h2>
                 {favoriteItems.length > 0 ? (
                     <ul className="books-list">
-                        {favoriteItems.map(book => (
-                            <li key={book._id} className="book-item">
-                                <h3 className="book-title">{book.name}</h3>
-                                <p className="book-author">Author: {book.author}</p>
-                                <button onClick={() => handleRemoveFromFavorites(book._id)}>
-                                    Remove
-                                </button>
-                            </li>
-                        ))}
+                        {favoriteItems.map(bookId => {
+                            const book = bookCache[bookId] || {};
+                            return (
+                                <li key={bookId} className="book-item">
+                                    <h3 className="book-title">{book.name || 'Unknown Title'}</h3>
+                                    <p className="book-author">Author: {book.author || 'Unknown Author'}</p>
+                                    <p className="book-description">{book.description || 'No description available'}</p>
+                                    <button onClick={() => handleRemoveFromFavorites(bookId)}>
+                                        Remove
+                                    </button>
+                                </li>
+                            );
+                        })}
                     </ul>
                 ) : (
                     <p className="no-books-message">No favorite books found.</p>

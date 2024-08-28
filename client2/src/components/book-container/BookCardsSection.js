@@ -45,10 +45,7 @@ export const BookCardsSection = () => {
     }, [page, limit, filters]);
 
     useEffect(() => {
-        const response = async () => {
-            await fetchFavoriteBooks();
-        }
-        response();
+        fetchFavoriteBooks();
     }, []);
 
 
@@ -72,6 +69,7 @@ export const BookCardsSection = () => {
                             <BookCard
                                 key={book._id}
                                 propBook={book}
+
                             />
 
                         ))

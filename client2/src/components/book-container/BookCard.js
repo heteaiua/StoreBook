@@ -39,6 +39,12 @@ const BookCard = ({propBook}) => {
     }));
     const [isBookFavorite, setIsBookFavorite] = useState(false);
 
+    useEffect(() => {
+        const isFavorite = checkIsFavorite(book._id)
+        setIsBookFavorite(isFavorite);
+        console.log(book._id, isFavorite, favoriteItems)
+    }, [favoriteItems]);
+
     const handleAddToCart = async () => {
         try {
             await addBookToCart(book, 1);
@@ -54,25 +60,21 @@ const BookCard = ({propBook}) => {
     };
     const handleAddToFavorite = async () => {
         try {
-            await addBookToFavorite(book._id);
-            setIsBookFavorite(true)
-            setSuccessMessage('Book added to favorites!');
+            if (isBookFavorite) {
+                await removeBookFromFavorite(book._id);
+                setIsBookFavorite(false);
+                setSuccessMessage('Book removed from favorites!');
+            } else {
+                await addBookToFavorite(book._id);
+                setIsBookFavorite(true);
+                setSuccessMessage('Book added to favorites!');
+            }
             setLocalError('');
-            setIsBookFavorite(true);
         } catch (err) {
-            setLocalError('Failed to add book to favorites. Please try again.' + error.message);
+            setLocalError(' try again.' + error.message);
             setSuccessMessage('');
         }
     };
-    useEffect(() => {
-        const checkIsFavorite = favoriteItems.some((fav) => fav === book._id);
-        console.log(book._id, favoriteItems, checkIsFavorite)
-        if (checkIsFavorite) {
-            setIsBookFavorite(true)
-        } else {
-            setIsBookFavorite(false)
-        }
-    }, [favoriteItems]);
 
     return (
         <div className="book-card">
