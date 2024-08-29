@@ -18,15 +18,15 @@ const OrdersTable = ({orders, setItem}) => {
                 </tr>
                 </thead>
                 <tbody>
-                {orders.map((item) => (
-                    <tr key={item._id}>
-                        <td>{item._id}</td>
-                        <td>{formatDate(item.date)}</td>
-                        <td>{calculateTotal(item.items)} RON</td>
+                {orders.map((order) => (
+                    <tr key={order._id}>
+                        <td>{order._id}</td>
+                        <td>{formatDate(order.date)}</td>
+                        <td>{calculateTotal(order.items)} RON</td>
                         <td>
-                            {calculateTotalItems(item.items)}
+                            {calculateTotalItems(order.items)}
                         </td>
-                        <td><Link to={`/orders/${item._id}`} onClick={() => setItem(item)}><i
+                        <td><Link to={`/orders/${order._id}`} onClick={() => setItem(order)}><i
                             className="bi bi-eye"></i></Link></td>
                     </tr>
                 ))}

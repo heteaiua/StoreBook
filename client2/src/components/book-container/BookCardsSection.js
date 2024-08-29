@@ -19,7 +19,6 @@ export const BookCardsSection = () => {
         error,
         fetchFavoriteBooks,
         getFilteredBooks,
-        favoriteItems
     } = useBooksData();
 
     const {page, limit, filters} = useBooksData(state => ({
@@ -44,45 +43,43 @@ export const BookCardsSection = () => {
         getFilteredBooks();
     }, [page, limit, filters]);
 
+
     useEffect(() => {
         fetchFavoriteBooks();
     }, []);
-
-
     return (
-        <LoadingErrorHandler loading={loading} error={error}>
-            <>
-                <div className="header">
-                    <button id="btn1" onClick={handleViewToggle} className="toggle-button" disabled={!isGridView}>
-                        List
-                    </button>
-                    <button id="btn2" onClick={handleViewToggle} className="toggle-button" disabled={isGridView}>
-                        Grid
-                    </button>
-                    {isAdmin && (
-                        <button id="btn3" onClick={handleOpenModal} className="btn btn-primary">Add</button>
-                    )}
-                </div>
+
+        <>
+            <div className="header">
+                <button id="btn1" onClick={handleViewToggle} className="toggle-button" disabled={!isGridView}>
+                    List
+                </button>
+                <button id="btn2" onClick={handleViewToggle} className="toggle-button" disabled={isGridView}>
+                    Grid
+                </button>
+                {isAdmin && (
+                    <button id="btn3" onClick={handleOpenModal} className="btn btn-primary">Add</button>
+                )}
+            </div>
+            <LoadingErrorHandler loading={loading} error={error}>
                 <div className={isGridView ? "book-grid" : "book-list"}>
                     {filteredBooks && filteredBooks.length > 0 ? (
                         filteredBooks.map((book) => (
                             <BookCard
                                 key={book._id}
                                 propBook={book}
-
                             />
-
                         ))
                     ) : (
                         <p>No books available</p>
                     )}
                 </div>
-                <PaginationControls/>
-                <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                    <AddBookForm/>
-                </Modal>
-            </>
-        </LoadingErrorHandler>
+            </LoadingErrorHandler>
+            <PaginationControls/>
+            <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                <AddBookForm onClose={handleCloseModal}/>
+            </Modal>
+        </>
 
     );
 };

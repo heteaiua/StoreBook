@@ -41,18 +41,25 @@ const BookDetailsPage = () => {
             }
         }
     };
-
     const handleQuantityChange = (event) => {
-        const value = parseInt(event.target.value, 10);
+        const value = event.target.value;
 
-        if (!isNaN(value) && value > 0 && value <= (bookDetails?.stockQuantity || 0)) {
-            setQuantity(value);
-        } else if (value > (bookDetails?.stockQuantity || 0)) {
-            setQuantity(bookDetails.stockQuantity);
+        const parsedValue = parseInt(value, 10);
+        const maxQuantity = bookDetails?.stockQuantity || 0;
+
+        if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= maxQuantity) {
+            setQuantity(parsedValue);
+        } else if (value === '') {
+            setQuantity('');
         } else {
-            setQuantity(1);
+            if (parsedValue > maxQuantity) {
+                setQuantity(maxQuantity);
+            } else {
+                setQuantity(1);
+            }
         }
-    }
+    };
+
     const existingCartItem = cartItems.find(item => item.bookId === bookDetails?._id);
     const cartQuantity = existingCartItem ? existingCartItem.quantity : 0;
     const canAddMore = cartQuantity < bookDetails?.stockQuantity;

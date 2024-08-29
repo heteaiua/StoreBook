@@ -13,9 +13,11 @@ export const useOrderdata = create((set, get) => ({
     resetOrdersCache: () => {
         set({ordersCache: [], orders: []});
     },
+
     setSelectedOrder: (order) => {
         set({selectedOrder: order});
     },
+
     getOrdersByRole: async () => {
         const {ordersCache} = get();
         if (ordersCache.length > 0) {
@@ -35,6 +37,7 @@ export const useOrderdata = create((set, get) => ({
             set({loading: false});
         }
     },
+
     addBookToCart: async (book, quantity) => {
         set({loading: true, error: null});
         const {cartItems} = get();
@@ -78,10 +81,6 @@ export const useOrderdata = create((set, get) => ({
         }
     },
 
-    setOrdersCache: (newOrder) => {
-        set({ordersCache: [...get().orders, newOrder]})
-    },
-
     sendOrder: async () => {
         const updateBook = useBooksData.getState().updateBook;
         const {cartItems} = get();
@@ -96,9 +95,7 @@ export const useOrderdata = create((set, get) => ({
                 return;
             }
             cartItems.map((item) => updateBook(item.bookId, {stockQuantity: item.stockQuantity - item.quantity}))
-
-            set({cartItems: [], setOrdersCache: response.data, loading: false});
-            return response.data;
+            set({cartItems: [], ordersCache: [...get().orders, response.data.data], loading: false});
         } catch (err) {
             console.error("Error sending order:", err);
             set({error: 'Error sending order.'});

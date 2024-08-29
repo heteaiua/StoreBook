@@ -13,7 +13,7 @@ const initialStates = {
     description: '',
     stockQuantity: ''
 }
-export const AddBookForm = () => {
+export const AddBookForm = ({onClose}) => {
     const [book, setBook] = useState(initialStates);
     const [localError, setLocalError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -36,6 +36,9 @@ export const AddBookForm = () => {
             await addBook(book);
             setSuccessMessage('Book added successfully');
             setTimeout(() => setSuccessMessage(''), 1000);
+            if (onClose) {
+                onClose();
+            }
         } catch (error) {
             setLocalError('Failed to add book' + error.message);
             setTimeout(() => setLocalError(''), 1000);

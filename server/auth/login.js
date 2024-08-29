@@ -44,6 +44,7 @@ const login = async (req, res) => {
                 user: {
                     id: user._id,
                     email: user.email,
+                    role: user.role,
                 },
             },
             process.env.ACCESS_TOKEN_SECRET,

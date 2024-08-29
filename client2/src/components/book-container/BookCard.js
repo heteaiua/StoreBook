@@ -42,7 +42,6 @@ const BookCard = ({propBook}) => {
     useEffect(() => {
         const isFavorite = checkIsFavorite(book._id)
         setIsBookFavorite(isFavorite);
-        console.log(book._id, isFavorite, favoriteItems)
     }, [favoriteItems]);
 
     const handleAddToCart = async () => {

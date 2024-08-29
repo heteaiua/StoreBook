@@ -1,7 +1,7 @@
 const orderService = require("../services/order.service");
 const bookService = require("../services/book.service");
 const getOrderById = async (req, res) => {
-    const orderId = req.params.orderId;
+    const {orderId} = req.params;
     try {
         const order = await orderService.getById(orderId);
         if (!order) {
@@ -112,9 +112,8 @@ const getOrders = async (req, res) => {
 
     try {
         let orders = await orderService.getAll();
-
-        if (userRole !== 'admin') {
-            orders = orders.filter(order => order.userId.toString() === userId.toString());
+        if (userRole === 'user') {
+            orders = orders.filter(order => order.userId.toString() === userId.toString())
         }
 
         if (!orders || orders.length === 0) {

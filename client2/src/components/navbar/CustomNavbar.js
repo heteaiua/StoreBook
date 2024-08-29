@@ -4,22 +4,24 @@ import DropdownCartOrders from "../../pages/order/DropdownCartOrders";
 import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "../../zustand/userStore";
 import {useOrderdata} from "../../zustand/orderStore";
+import {useBooksData} from "../../zustand/bookStore";
 
 function CustomNavbar() {
     const navigate = useNavigate()
     const {isAuthenticated, logout, checkAuth, user, fetchUser} = useAuth();
     const {resetOrdersCache} = useOrderdata();
+    const {resetBooksCache} = useBooksData();
 
     useEffect(() => {
         checkAuth();
         if (isAuthenticated) {
-
             fetchUser();
         }
     }, [isAuthenticated]);
 
     const handleLogout = () => {
         resetOrdersCache();
+        resetBooksCache();
         logout();
         navigate('/login');
     };

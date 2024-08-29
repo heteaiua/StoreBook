@@ -16,7 +16,8 @@ export const useAuth = create((set, get) => ({
     checkAuth: () => set({isAuthenticated: !!getAccessToken()}),
     fetchUser: async () => {
         try {
-            const userData = await getCurrentUser();
+            const response = await getCurrentUser();
+            const userData = response.data;
             if (userData && userData._id) {
                 set({user: userData, error: null});
             } else {
@@ -31,7 +32,8 @@ export const useAuth = create((set, get) => ({
             if (!updates._id) {
                 set({error: null});
             }
-            const updatedUser = await updateUserAPI(updates._id, updates);
+            const response = await updateUserAPI(updates._id, updates);
+            const updatedUser = response.data;
             if (updatedUser && updatedUser.data) {
                 set({user: updatedUser.data, editMode: false, error: null});
             }

@@ -7,7 +7,6 @@ const signup = async (req, res) => {
         lastName,
         email,
         password,
-        rePassword,
         age,
         address,
         phoneNumber,
@@ -39,7 +38,6 @@ const signup = async (req, res) => {
         });
 
         if (user) {
-            console.log(user.role, user.email, "rolll")
             return res.status(201).json({
                 email: user.email,
                 role: user.role,

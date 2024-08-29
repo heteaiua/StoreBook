@@ -5,19 +5,17 @@ import OrdersTable from "../../components/table/Table";
 import {LoadingErrorHandler} from "../../components/loading-error-handler/loading-error-handler";
 
 export default function OrdersPage() {
-    const {loading, error, getOrdersByRole, ordersCache = [], setSelectedOrder} = useOrderdata(state => ({
+    const {loading, error, getOrdersByRole, ordersCache = [], setSelectedOrder, orders = []} = useOrderdata(state => ({
         loading: state.loading,
         error: state.error,
         getOrdersByRole: state.getOrdersByRole,
         ordersCache: state.ordersCache,
         setSelectedOrder: state.setSelectedOrder,
+        orders: state.orders,
     }));
 
     useEffect(() => {
-        const fetchOrdersAndBooks = async () => {
-            await getOrdersByRole();
-        }
-        fetchOrdersAndBooks();
+        getOrdersByRole();
     }, []);
 
 
@@ -29,7 +27,7 @@ export default function OrdersPage() {
                 {ordersCache.length === 0 ? (
                     <p>No orders found.</p>
                 ) : (
-                    <OrdersTable orders={ordersCache} setItem={setSelectedOrder} detailLevel="short"/>
+                    <OrdersTable orders={ordersCache} setItem={setSelectedOrder}/>
                 )}
             </LoadingErrorHandler>
         </div>

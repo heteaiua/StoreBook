@@ -128,6 +128,13 @@
     height: 100px;
 }
 
+.image-container {
+    max-height: 200px;
+    max-width: 300px;
+    width: auto;
+    height: auto;
+}
+
 .book-list .image-container {
     border-radius: 8px;
     object-fit: cover;

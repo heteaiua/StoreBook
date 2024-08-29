@@ -11,7 +11,6 @@ import {addBookToFavoriteApi, getFavoriteBooksApi, removeBookFromFavoritesApi} f
 const initialState = {
     loading: false,
     error: null,
-    data: [],
     filteredBooks: [],
     filters: {
         author: '',
@@ -45,6 +44,10 @@ export const useBooksData = create((set, get) => ({
 
     })),
 
+    resetBooksCache: () => {
+        set({bookCache: [], bookDetails: []});
+    },
+
     resetFilters: () => {
         set(state => {
             const resetFilters = {
@@ -56,6 +59,7 @@ export const useBooksData = create((set, get) => ({
             return {filters: resetFilters, page: 1, limit: 5};
         });
     },
+
     getFilteredBooks: async () => {
         const {page, limit, filters} = get();
         set({loading: true, error: null});
@@ -126,26 +130,23 @@ export const useBooksData = create((set, get) => ({
     },
 
     fetchBookById: async (id) => {
-        const {bookCache} = get();
-        if (bookCache[id]) {
+        if (get().bookCache[id]) {
             set({
-                bookDetails: bookCache[id],
-                bookCache: bookCache[id]
-
+                bookDetails: get().bookCache[id],
             });
             return;
         }
         set({loading: true, error: null});
         try {
             const response = await getBookByIdApi(id);
+            console.log({id})
             const bookData = response.data.data;
-            const updatedBookCache = {...bookCache, [id]: bookData};
+            const updatedBookCache = {...get().bookCache, [id]: bookData};
             set({
                 bookCache: updatedBookCache,
                 bookDetails: bookData,
             });
-            const state = useBooksData.getState()
-            localStorage.setItem('bookCache', JSON.stringify(bookCache));
+            localStorage.setItem('bookCache', JSON.stringify(get().bookCache));
         } catch (error) {
             set({error: 'Failed to fetch book details'});
         } finally {
@@ -159,8 +160,6 @@ export const useBooksData = create((set, get) => ({
             const response = await updateBookApi(id, updatedData);
             const updatedBook = response.data.data;
             set(state => {
-                const updatedBookCache = {...state.bookCache, [id]: updatedBook};
-                console.log(updatedBookCache)
                 return {
                     bookCache: updatedBook,
                     bookDetails: updatedBook,
@@ -181,7 +180,6 @@ export const useBooksData = create((set, get) => ({
             const response = await addBookApi(bookData);
             const newBook = response.data.data;
             set(state => ({
-                data: [...state.data, newBook],
                 filteredBooks: [...state.filteredBooks, newBook]
             }))
         } catch (error) {
@@ -199,7 +197,6 @@ export const useBooksData = create((set, get) => ({
             try {
                 const response = await addBookToFavoriteApi(bookId);
                 const newFavoriteBookId = response.data.bookId;
-
                 set(state => ({
                     favoriteItems: [...state.favoriteItems, newFavoriteBookId],
                 }));
@@ -220,11 +217,9 @@ export const useBooksData = create((set, get) => ({
             const response = await getFavoriteBooksApi();
             const favoriteIds = response.data;
             set({favoriteItems: favoriteIds});
-            console.log(favoriteIds, "IDS")
             for (const fav of favoriteIds) {
                 await get().fetchBookById(fav);
             }
-            console.log('favorite items', response.data);
         } catch (error) {
             console.error('Failed to fetch favorite items:', error);
         }
@@ -237,7 +232,6 @@ export const useBooksData = create((set, get) => ({
             set({loading: true, error: null});
             try {
                 await removeBookFromFavoritesApi(bookId);
-
                 set(state => ({
                     favoriteItems: state.favoriteItems.filter(id => id !== bookId),
                 }));

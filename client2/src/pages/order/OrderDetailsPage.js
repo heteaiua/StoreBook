@@ -5,35 +5,43 @@ import BookViewDetails from "../../components/book-view/BookViewDetails";
 import './order-details.css'
 import {formatDate} from "../../utils/utils";
 import {LoadingErrorHandler} from "../../components/loading-error-handler/loading-error-handler";
+import {useParams} from "react-router-dom";
+import {fetchOrderByIdApi} from "../../endpoints/orderEndpoints";
 
 export default function OrderDetailsPage() {
-    const {selectedOrder} = useOrderdata()
+    const {id} = useParams();
+    const {selectedOrder, setSelectedOrder} = useOrderdata()
     const {fetchBookById, bookCache, loading, error} = useBooksData();
 
     useEffect(() => {
-        const fetchBooks = async () => {
-            if (selectedOrder.items) {
-                try {
-                    const fetchPromises = selectedOrder.items.map(async (item) => {
+        const fetchOrderAndBooks = async () => {
+            try {
+                if (!selectedOrder || selectedOrder._id !== id) {
+                    const response = await fetchOrderByIdApi(id);
+                    const orderInfo = response.data.data;
+                    if (orderInfo) {
+                        setSelectedOrder(orderInfo);
+                    }
+                }
+                console.log(JSON.stringify(bookCache))
+
+                if (selectedOrder && selectedOrder.items) {
+                    selectedOrder.items.forEach((item) => {
                         if (!bookCache[item.bookId]) {
-                            await fetchBookById(item.bookId);
+                            fetchBookById(item.bookId);
                         }
                     });
-                    await Promise.all(fetchPromises);
-                } catch (error) {
-                    console.log(error, 'Error fetching books')
                 }
-            } else {
-                console.log('No items fetched from selected Order');
+            } catch (error) {
+                console.log("Error fetching order or books:", error);
             }
         };
-        fetchBooks();
+        fetchOrderAndBooks();
     }, [selectedOrder]);
 
     if (!selectedOrder) {
         return <div>No order selected.</div>;
     }
-
     return (<div>
             <div className="order-page">
                 <h1 className="welcome-message"><span><i className="bi bi-cart-check-fill"></i></span>Order details
@@ -44,28 +52,19 @@ export default function OrderDetailsPage() {
                     <div>Order ID: {selectedOrder._id}</div>
                     <div>Date: {formatDate(selectedOrder.date)}</div>
                 </div>
-
                 <div>
                     <ul>
-                        {selectedOrder.items && selectedOrder.items.length > 0 ? (
-                            selectedOrder.items.map((item) => {
-                                const book = bookCache[item.bookId];
-                                return (
-                                    <li key={item.bookId}>
-                                        {book ? (
-                                            <>
-                                                <div>Quantity: {item.quantity}</div>
-                                                <BookViewDetails book={book} viewType={'large'}/>
-                                            </>
-                                        ) : (
-                                            <p>Book not found</p>
-                                        )}
-                                    </li>
-                                );
-                            })
-                        ) : (
-                            <p>No items found in the order.</p>
-                        )}
+                        {selectedOrder.items && selectedOrder.items.length > 0 ? (selectedOrder.items.map((item) => {
+                            const book = bookCache[item.bookId];
+                            return (<div key={item.bookId}>
+                                {book ? (<>
+                                    <div className='book card book-price'>Quantity: {item.quantity}</div>
+                                    <div className='book-card'>
+                                        <BookViewDetails book={book} viewType={'large'}/>
+                                    </div>
+                                </>) : (<p>Book not found</p>)}
+                            </div>);
+                        })) : (<p>No items found in the order.</p>)}
                     </ul>
                 </div>
             </LoadingErrorHandler>

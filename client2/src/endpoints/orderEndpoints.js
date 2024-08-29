@@ -12,3 +12,9 @@ export const addBookToCartApi = async (orderData) => axios.post(orderURL, orderD
         'Authorization': `Bearer ${getAccessToken()}`
     }
 });
+
+export const fetchOrderByIdApi = async (id) => axios.get(`${orderURL}/${id}`, {
+    headers: {
+        'Authorization': `Bearer ${getAccessToken()}`
+    }
+});

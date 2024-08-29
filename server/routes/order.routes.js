@@ -11,7 +11,7 @@ const validateToken = require("../auth/middleware/validateTokenHandler");
 
 const router = express.Router();
 router.get("/", validateToken, getOrders);
-router.get("/:orderId", getOrderById);
+router.get("/:orderId", validateToken, getOrderById);
 router.post("/", validateToken, addOrder);
 router.delete("/:orderId", deleteOrder);
 router.delete("/", deleteAllOrders);

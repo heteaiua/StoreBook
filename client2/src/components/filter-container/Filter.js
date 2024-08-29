@@ -25,7 +25,6 @@ const Filter = ({filterType, selectedValue, onFilterChange, options}) => {
                         </option>
                     ))}
                 </FormSelect>
-
             }
         </div>
     );
